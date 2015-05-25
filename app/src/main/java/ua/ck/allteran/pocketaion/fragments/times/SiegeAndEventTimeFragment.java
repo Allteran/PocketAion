@@ -1,4 +1,4 @@
-package ua.ck.allteran.pocketaion.fragments;
+package ua.ck.allteran.pocketaion.fragments.times;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ua.ck.allteran.pocketaion.fragments.BasicFragment;
+
 /**
  * Created by Dante on 5/22/2015.
  */
-public class SiegesFragment extends BasicFragment {
+public class SiegeAndEventTimeFragment extends BasicFragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

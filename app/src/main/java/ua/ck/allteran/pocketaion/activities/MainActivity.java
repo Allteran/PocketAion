@@ -3,9 +3,12 @@ package ua.ck.allteran.pocketaion.activities;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +20,30 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
-import ua.ck.allteran.pocketaion.fragments.MainFragment;
+import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
+import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
+import ua.ck.allteran.pocketaion.fragments.maps.ShugoNomandMapFragment;
+import ua.ck.allteran.pocketaion.fragments.maps.TreesMapFragment;
+import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
+import ua.ck.allteran.pocketaion.fragments.times.RiftsTimeFragment;
+import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
+import ua.ck.allteran.pocketaion.fragments.times.SiegeAndEventTimeFragment;
+import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
-import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.*;
+
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_MAPS;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_STIGMAS;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_TIMES;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_MAPS_BMSHUGO;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_MAPS_RIFTS;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_MAPS_SN;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_MAPS_TREES;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_STIGMAS_CALCULATE;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_TIMES_RIFTS;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_TIMES_SIEGE;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_TIMES_SN;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_TIMES_TREES;
 
 
 public class MainActivity extends BasicActivity {
@@ -34,7 +57,7 @@ public class MainActivity extends BasicActivity {
     private ArrayList<Integer> mSubcategoryCount = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -46,7 +69,6 @@ public class MainActivity extends BasicActivity {
         mCategoryList = (ExpandableListView) findViewById(R.id.left_drawer);
 
         mCategoryList.setAdapter(new ExpandableAdapter(this, mCategoryName, mSubcategoryName, mSubcategoryCount));
-//        final int previousGroup;
         Log.i(TAG, String.valueOf(mCategoryName.size()));
         Log.i(TAG, String.valueOf(mSubcategoryName.size()));
         mCategoryList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -63,43 +85,42 @@ public class MainActivity extends BasicActivity {
             }
         });
 
-
         mCategoryList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+                Fragment fragment = null;
                 switch (i) {
                     case CAT_TIMES:
                         switch (i1) {
                             case SUBCAT_TIMES_SIEGE:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new SiegeAndEventTimeFragment();
                                 break;
                             case SUBCAT_TIMES_RIFTS:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new RiftsTimeFragment();
                                 break;
                             case SUBCAT_TIMES_TREES:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new TreesTimeFragment();
                                 break;
                             case SUBCAT_TIMES_SN:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new ShugoNomandTimeFragment();
                                 break;
                             default:
                                 return true;
-                        }
-                        ;
+                        };
                         break;
                     case CAT_MAPS:
                         switch (i1) {
                             case SUBCAT_MAPS_RIFTS:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new RiftsMapFragment();
                                 break;
                             case SUBCAT_MAPS_TREES:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new TreesMapFragment();
                                 break;
                             case SUBCAT_MAPS_SN:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new ShugoNomandMapFragment();
                                 break;
                             case SUBCAT_MAPS_BMSHUGO:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new BMShugoMapFragment();
                                 break;
                             default:
                                 return true;
@@ -109,7 +130,7 @@ public class MainActivity extends BasicActivity {
                     case CAT_STIGMAS:
                         switch (i1) {
                             case SUBCAT_STIGMAS_CALCULATE:
-                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                fragment = new CalculateStigmasFragment();
                                 break;
                             default:
                                 return true;
@@ -117,6 +138,12 @@ public class MainActivity extends BasicActivity {
                         break;
                     default:
                         return true;
+                }
+
+                if (savedInstanceState == null) {
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_activity_main, fragment)
+                            .commit();
                 }
                 return true;
             }
@@ -136,12 +163,7 @@ public class MainActivity extends BasicActivity {
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_activity_main, new MainFragment())
-                    .commit();
-        }
+        mDrawerLayout.setDrawerShadow(R.mipmap.drawer_shadow, GravityCompat.START);
     }
 
     private void setDrawerElementsName() {
