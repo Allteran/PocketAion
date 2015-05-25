@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,6 +20,7 @@ import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.fragments.MainFragment;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
+import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.*;
 
 
 public class MainActivity extends BasicActivity {
@@ -61,9 +63,61 @@ public class MainActivity extends BasicActivity {
             }
         });
 
+
         mCategoryList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
+                switch (i) {
+                    case CAT_TIMES:
+                        switch (i1) {
+                            case SUBCAT_TIMES_SIEGE:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_TIMES_RIFTS:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_TIMES_TREES:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_TIMES_SN:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                return true;
+                        }
+                        ;
+                        break;
+                    case CAT_MAPS:
+                        switch (i1) {
+                            case SUBCAT_MAPS_RIFTS:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_MAPS_TREES:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_MAPS_SN:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            case SUBCAT_MAPS_BMSHUGO:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                return true;
+                        }
+                        ;
+                        break;
+                    case CAT_STIGMAS:
+                        switch (i1) {
+                            case SUBCAT_STIGMAS_CALCULATE:
+                                Toast.makeText(MainActivity.this, "Group No" + i + " subgroup no +" + i1, Toast.LENGTH_SHORT).show();
+                                break;
+                            default:
+                                return true;
+                        }
+                        break;
+                    default:
+                        return true;
+                }
                 return true;
             }
         });
