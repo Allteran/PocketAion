@@ -6,10 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 
 /**
- * Created by Dante on 5/22/2015.
+ * Created by Alteran on 5/22/2015.
  */
 public class SiegeAndEventTimeFragment extends BasicFragment {
 
@@ -21,7 +22,7 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return inflater.inflate(R.layout.fragment_siege_and_event_time,container,false);
     }
 
     @Override
