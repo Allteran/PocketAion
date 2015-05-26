@@ -263,10 +263,10 @@ public class MainActivity extends BasicActivity {
                                  ArrayList<ArrayList<NavigationDrawerSubcategory>> subcategoryName,
                                  ArrayList<Integer> subcategoryCount) {
             mLayoutInflater = LayoutInflater.from(context);
-            mCategoryNameAdapter = mCategoryName;
-            mSubcategoryNameAdapter = mSubcategoryName;
-            mSubcategoryCountAdapter = mSubcategoryCount;
-            mCountAdapter = mCategoryName.size();
+            mCategoryNameAdapter = categoryName;
+            mSubcategoryNameAdapter = subcategoryName;
+            mSubcategoryCountAdapter = subcategoryCount;
+            mCountAdapter = categoryName.size();
         }
 
         @Override
@@ -281,23 +281,23 @@ public class MainActivity extends BasicActivity {
 
         @Override
         public int getGroupCount() {
-            return mCategoryNameAdapter.size();
+            return mCountAdapter;
         }
 
         @Override
         public int getChildrenCount(int i) {
-            return (mSubcategoryCount.get(i));
+            return (mSubcategoryCountAdapter.get(i));
         }
 
         @Override
         public Object getGroup(int i) {
-            return mCategoryName.get(i).getCategoryName();
+            return mCategoryNameAdapter.get(i).getCategoryName();
         }
 
         @Override
         public NavigationDrawerSubcategory getChild(int i, int i1) {
-            ArrayList<NavigationDrawerSubcategory> tempList = new ArrayList<>();
-            tempList = mSubcategoryName.get(i);
+            ArrayList<NavigationDrawerSubcategory> tempList;
+            tempList = mSubcategoryNameAdapter.get(i);
             return tempList.get(i1);
         }
 
