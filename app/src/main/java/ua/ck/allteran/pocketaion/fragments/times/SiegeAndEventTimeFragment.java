@@ -9,8 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
+import android.widget.Toast;
 
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
@@ -36,6 +35,7 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setHasOptionsMenu(true);
 
         mTimeCurrent = (TextView) view.findViewById(R.id.time_current);
         mTime1h = (TextView) view.findViewById(R.id.time_1h);
@@ -59,6 +59,7 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.action_show_whole_schedule:
+                Toast.makeText(getActivity(), "Actions show whole shedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_add_to_favorites:
                 break;

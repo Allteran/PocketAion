@@ -145,6 +145,7 @@ public class MainActivity extends BasicActivity {
                             .replace(R.id.container_activity_main, fragment)
                             .commit();
                 }
+                mDrawerLayout.closeDrawers();
                 return true;
             }
         });
