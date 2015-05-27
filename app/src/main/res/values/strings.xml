@@ -22,4 +22,6 @@
     <string name="subcategory_map_sn">Shugo Nomand\'s Map</string>
     <string name="subcategory_map_bmshugo">Blood Marks Shugo\'s Map</string>
     <string name="subcategory_stigmas_calculate">Calculate</string>
+    <string name="action_show_whole_schedule">Show Whole Schedule</string>
+    <string name="action_add_to_favorites">Add Event To Favorites</string>
 </resources>

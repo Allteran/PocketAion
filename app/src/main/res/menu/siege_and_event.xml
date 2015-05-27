@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SiegeAndEventTimeFragment">
+    <item
+        android:id="@+id/action_show_whole_schedule"
+        android:orderInCategory="1"
+        android:title="@string/action_show_whole_schedule"
+        android:icon="@mipmap/ic_action_view_as_list"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_add_to_favorites"
+        android:orderInCategory="2"
+        android:title="@string/action_add_to_favorites"
+        android:icon="@mipmap/ic_action_important"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+</menu>
