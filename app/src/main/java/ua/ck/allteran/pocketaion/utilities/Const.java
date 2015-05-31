@@ -4,6 +4,11 @@ package ua.ck.allteran.pocketaion.utilities;
  * Created by Allteran on 5/25/2015.
  */
 public class Const {
+
+    public static final int SLEEP_TIME_10_MIN = 10*60;
+
+    public static final String TIME_PULL_URL = "http://json-time.appspot.com/time.json?tz=America/Chicago";
+
     public static class Navigation{
         //category's constants
         public static final int CAT_TIMES = 0;

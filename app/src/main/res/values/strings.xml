@@ -1,15 +1,6 @@
 <resources>
+    <!--Headers and titles-->
     <string name="app_name">Pocket Aion</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="times_button">Times</string>
-    <string name="maps_button">Maps</string>
-    <string name="stigmas_button">Stigmas</string>
-    <string name="sieges_button">Siege Shedule</string>
-    <string name="rifts_button">Rift\'s Time</string>
-    <string name="trees_button">Tree\'s Time</string>
-    <string name="sn_button">Shugo Nomands Time</string>
     <string name="category_times">Times</string>
     <string name="category_maps">Maps</string>
     <string name="category_stigmas">Stigmas</string>
@@ -22,6 +13,21 @@
     <string name="subcategory_map_sn">Shugo Nomand\'s Map</string>
     <string name="subcategory_map_bmshugo">Blood Marks Shugo\'s Map</string>
     <string name="subcategory_stigmas_calculate">Calculate</string>
+
+    <!--Button's name and labels-->
+    <string name="action_settings">Settings</string>
     <string name="action_show_whole_schedule">Show Whole Schedule</string>
     <string name="action_add_to_favorites">Add Event To Favorites</string>
+
+    <string name="times_button">Times</string>
+    <string name="maps_button">Maps</string>
+    <string name="stigmas_button">Stigmas</string>
+    <string name="sieges_button">Siege Shedule</string>
+    <string name="rifts_button">Rift\'s Time</string>
+    <string name="trees_button">Tree\'s Time</string>
+    <string name="sn_button">Shugo Nomands Time</string>
+
+    <!--Database's names and utils-->
+    <string name="default_database_name">shedule.realm</string>
+    <string name="fave_events_database_name">favorites.realm</string>
 </resources>

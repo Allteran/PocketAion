@@ -2,6 +2,7 @@ package ua.ck.allteran.pocketaion.fragments.times;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
+import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 
 /**
@@ -20,10 +23,15 @@ import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 public class SiegeAndEventTimeFragment extends BasicFragment {
     private TextView mTimeCurrent, mTime1h, mTime2h, mTime3h,
             mEventCurrent, mEvent1h, mEvent2h, mEvent3h;
+    private AppCompatActivity mActivity;
+    private Realm mRealmSchedule, mRealmFaveEvents;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mActivity = (MainActivity) getActivity();
+        mRealmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
+        mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
     }
 
     @Nullable
@@ -59,13 +67,14 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.action_show_whole_schedule:
-                Toast.makeText(getActivity(), "Actions show whole shedule", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Actions show whole schedule", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_add_to_favorites:
+            case R.id.action_show_favorites:
                 break;
             default:
                 return true;
         }
         return true;
     }
+
 }
