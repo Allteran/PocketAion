@@ -7,174 +7,134 @@ import ua.ck.allteran.pocketaion.entites.PvPEvent;
 
 /**
  * Created by Allteran on 5/31/2015.
+ * <p/>
+ * To describe time I use array, where i - day of week, j - time.
+ * Time is measuring in numbers from 0 to 23. If you see number 25 in time variable
+ * it means, that there is no such event in that day
  */
 public class CreateDatabaseHelper {
 
     public void createEventDatabase(Realm realm) {
         ArrayList<PvPEvent> events = new ArrayList<>();
         PvPEvent event;
+        int[][] beginTime, endTime;
+        String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
-        /**Monday**/
+        /**Daily reset**/
         event = new PvPEvent();
+        beginTime = new int[][]
+                {{9}, {9}, {9}, {9}, {9}, {9}, {9}};
+        endTime = new int[][]
+                {{9}, {9}, {9}, {9}, {9}, {9}, {9}};
         event.setId(1);
         event.setEventName("Daily reset");
-        event.setBeginTime(9);
-        event.setEndTime(9);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Arena**/
         event = new PvPEvent();
+        beginTime = new int[][]
+                {{10, 18}, {10, 18}, {10, 18}, {10, 18}, {10, 18}, {10, 22}, {10, 22}};
+        endTime = new int[][]
+                {{14, 0}, {14, 0}, {14, 0}, {14, 0}, {14, 0}, {20, 2}, {20, 2}};
         event.setId(2);
         event.setEventName("Arena");
-        event.setBeginTime(10);
-        event.setEndTime(13);
-        event.setDays("Monday");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Dredgion**/
         event = new PvPEvent();
+        beginTime = new int[][]
+                {{12, 20, 0}, {12, 20, 0}, {12, 20, 0}, {12, 20, 0}, {12, 20, 0}, {12, 20, 0}, {12, 20, 0}};
+        endTime = new int[][]
+                {{14, 22, 2}, {14, 22, 2}, {14, 22, 2}, {14, 22, 2}, {14, 22, 2}, {14, 22, 2}, {14, 22, 2}};
         event.setId(3);
         event.setEventName("Dredgion");
-        event.setBeginTime(12);
-        event.setEndTime(14);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Ophidan Bridge**/
         event = new PvPEvent();
+        beginTime = new int[][]
+                {{12, 19, 23}, {12, 19, 23}, {12, 19, 23}, {12, 19, 23}, {12, 19, 23}, {12, 19, 23}, {12, 19, 23}};
+        endTime = new int[][]
+                {{14, 21, 1}, {14, 21, 1}, {14, 21, 1}, {14, 21, 1}, {14, 21, 1}, {14, 21, 1}, {14, 21, 1}};
         event.setId(4);
         event.setEventName("Engulfed Ophidan Bridge");
-        event.setBeginTime(12);
-        event.setEndTime(14);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Kamar Battlefield**/
         event = new PvPEvent();
+        beginTime = new int[][]
+                {{21}, {21}, {21}, {21}, {21}, {21}, {21}};
+        endTime = new int[][]
+                {{23}, {23}, {23}, {23}, {23}, {23}, {23}};
         event.setId(5);
-        event.setEventName("Sillus Siege");
-        event.setBeginTime(14);
-        event.setEndTime(15);
-        event.setDays("Monday", "Saturday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(6);
-        event.setEventName("Sulfur Siege");
-        event.setBeginTime(16);
-        event.setEndTime(17);
-        event.setDays("Monday", "Friday", "Saturday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(7);
-        event.setEventName("Asteria Siege");
-        event.setBeginTime(16);
-        event.setEndTime(17);
-        event.setDays("Monday", "Friday", "Saturday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(8);
-        event.setEventName("Roah Siege");
-        event.setBeginTime(16);
-        event.setEndTime(17);
-        event.setDays("Monday", "Friday", "Saturday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(9);
-        event.setEventName("Arena");
-        event.setBeginTime(18);
-        event.setEndTime(23);
-        event.setDays("Monday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(10);
-        event.setEventName("Tia Forts Siege");
-        event.setBeginTime(18);
-        event.setEndTime(19);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(11);
-        event.setEventName("Engulfed Ophidan Bridge");
-        event.setBeginTime(19);
-        event.setEndTime(21);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(12);
-        event.setEventName("Dredgion");
-        event.setBeginTime(20);
-        event.setEndTime(22);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        events.add(event);
-        //edit name
-        event = new PvPEvent();
-        event.setId(13);
-        event.setEventName("ToS Siege");
-        event.setBeginTime(20);
-        event.setEndTime(21);
-        event.setDays("Monday", "Wednesday");
-        events.add(event);
-        //edit name
-        event = new PvPEvent();
-        event.setId(14);
-        event.setEventName("Vorgatem Siege");
-        event.setBeginTime(20);
-        event.setEndTime(21);
-        event.setDays("Monday", "Wednesday");
-        events.add(event);
-
-        event = new PvPEvent();
-        event.setId(15);
         event.setEventName("Kamar Battlefield");
-        event.setBeginTime(21);
-        event.setEndTime(23);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Tia Forts Siege**/
         event = new PvPEvent();
-        event.setId(16);
-        event.setEventName("Krotan Siege");
-        event.setBeginTime(22);
-        event.setEndTime(23);
-        event.setDays("Monday", "Friday", "Saturday");
+        beginTime = new int[][]
+                {{18}, {18}, {18}, {18}, {18}, {18}, {18}};
+        endTime = new int[][]
+                {{19}, {19}, {19}, {19}, {19}, {19}, {19}};
+        event.setId(6);
+        event.setEventName("Tia Forts Siege");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Discipline&Chaos**/
         event = new PvPEvent();
-        event.setId(17);
-        event.setEventName("Miren Siege");
-        event.setBeginTime(22);
-        event.setEndTime(23);
-        event.setDays("Monday", "Tuesday", "Friday", "Saturday");
+        beginTime = new int[][]
+                {{0}, {0}, {0}, {0}, {0}, {25}, {25}};
+        endTime = new int[][]
+                {{2}, {2}, {2}, {2}, {2}, {25}, {25}};
+        event.setId(7);
+        event.setEventName("Discipline&Chaos");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Sillus Siege**/
         event = new PvPEvent();
-        event.setId(18);
-        event.setEventName("Engulfed Ophidan Bridge");
-        event.setBeginTime(21);
-        event.setEndTime(23);
-        event.setDays("Monday");
+        beginTime = new int[][]
+                {{14}, {25}, {25}, {20}, {25}, {14}, {14}};
+        endTime = new int[][]
+                {{15}, {25}, {25}, {21}, {25}, {15}, {15}};
+        event.setId(8);
+        event.setEventName("Sillus Siege");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
 
+        /**Sulfur Fort Siege**/
         event = new PvPEvent();
-        event.setId(19);
-        event.setEventName("D/C Arena");
-        event.setBeginTime(0);
-        event.setEndTime(2);
-        event.setDays("Monday");
+        beginTime = new int[][]
+                {{16}, {25}, {22}, {20}, {16}, {16}, {22}};
+        endTime = new int[][]
+                {{17}, {25}, {23}, {21}, {17}, {17}, {23}};
+        event.setId(9);
+        event.setEventName("Sulfur Fort Siege");
+        event.setBeginTime(beginTime);
+        event.setEndTime(endTime);
+        event.setDays(days);
         events.add(event);
-
-        event = new PvPEvent();
-        event.setId(20);
-        event.setEventName("Dredgion");
-        event.setBeginTime(0);
-        event.setEndTime(2);
-        event.setDays("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-        events.add(event);
-
-        /**Tuesday**/
     }
 }

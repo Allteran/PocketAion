@@ -10,33 +10,33 @@ import io.realm.annotations.PrimaryKey;
 public class PvPEvent extends RealmObject{
     @PrimaryKey
     private int id;
-    private int mBeginTime;
-    private int mEndTime;
+    private int[][] mBeginTime;
+    private int[][] mEndTime;
     private String mEventName;
     private String[] mDays;
 
-    public int getBeginTime() {
+    public int[][] getBeginTime() {
         return mBeginTime;
     }
 
-    public void setBeginTime(int mBeginTime) {
-        this.mBeginTime = mBeginTime;
+    public void setBeginTime(int[][] beginTime) {
+        this.mBeginTime = beginTime;
     }
 
-    public int getEndTime() {
+    public int[][] getEndTime() {
         return mEndTime;
     }
 
-    public void setEndTime(int mEndTime) {
-        this.mEndTime = mEndTime;
+    public void setEndTime(int[][] endTime) {
+        this.mEndTime = endTime;
     }
 
     public String getEventName() {
         return mEventName;
     }
 
-    public void setEventName(String mEventName) {
-        this.mEventName = mEventName;
+    public void setEventName(String eventName) {
+        this.mEventName = eventName;
     }
 
     public int getId() {
