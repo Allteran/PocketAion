@@ -9,6 +9,14 @@ public class Const {
 
     public static final String TIME_PULL_URL = "http://json-time.appspot.com/time.json?tz=America/Chicago";
 
+    public static final String DAY_MONDAY = "Monday";
+    public static final String DAY_TUESDAY = "Tuesday";
+    public static final String DAY_WEDNESDAY = "Wednesday";
+    public static final String DAY_THURSDAY = "Thursday";
+    public static final String DAY_FRIDAY = "Friday";
+    public static final String DAY_SATURDAY = "Saturday";
+    public static final String DAY_SUNDAY = "Sunday";
+
     public static class Navigation{
         //category's constants
         public static final int CAT_TIMES = 0;

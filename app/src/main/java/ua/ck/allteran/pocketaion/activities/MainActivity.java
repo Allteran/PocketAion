@@ -1,6 +1,7 @@
 package ua.ck.allteran.pocketaion.activities;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
+import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.ShugoNomandMapFragment;

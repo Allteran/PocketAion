@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
+import io.realm.RealmList;
+import ua.ck.allteran.pocketaion.entites.EventsTime;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
 
 /**
@@ -17,8 +18,7 @@ public class RealmHelper {
 
         PvPEvent realmEvent = realm.createObject(PvPEvent.class);
         realmEvent.setId(event.getId());
-        realmEvent.setBeginTime(event.getBeginTime());
-        realmEvent.setEndTime(event.getEndTime());
+        realmEvent.setTime(event.getTime());
         realmEvent.setEventName(event.getEventName());
 
         realm.commitTransaction();

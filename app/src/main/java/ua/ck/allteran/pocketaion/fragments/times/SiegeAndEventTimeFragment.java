@@ -1,5 +1,6 @@
 package ua.ck.allteran.pocketaion.fragments.times;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
+import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
+import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 
 /**
  * Created by Alteran on 5/22/2015.
@@ -25,6 +28,7 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
             mEventCurrent, mEvent1h, mEvent2h, mEvent3h;
     private AppCompatActivity mActivity;
     private Realm mRealmSchedule, mRealmFaveEvents;
+    private PreferenceHelper mPreferenceHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +36,12 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         mActivity = (MainActivity) getActivity();
         mRealmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
         mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
+        mPreferenceHelper = PreferenceHelper.getInstance(mActivity);
+        if(mPreferenceHelper.isFirstLaunch()) {
+            new CreateDBTask().execute();
+            mPreferenceHelper.launchFirstTime(false);
+        }
+
     }
 
     @Nullable
@@ -76,5 +86,24 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         }
         return true;
     }
+    private class CreateDBTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showLoadingBar(getView());
+        }
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
+            dbHelper.createEventDatabase(mRealmSchedule);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            showSchedule(getView());
+        }
+    }
 }

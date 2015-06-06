@@ -1,43 +1,17 @@
 package ua.ck.allteran.pocketaion.entites;
 
+import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.RealmClass;
 
 /**
  * Created by Allteran on 5/27/2015.
  */
-
-public class PvPEvent extends RealmObject{
-    @PrimaryKey
+@RealmClass
+public class PvPEvent extends RealmObject {
     private int id;
-    private int[][] mBeginTime;
-    private int[][] mEndTime;
-    private String mEventName;
-    private String[] mDays;
-
-    public int[][] getBeginTime() {
-        return mBeginTime;
-    }
-
-    public void setBeginTime(int[][] beginTime) {
-        this.mBeginTime = beginTime;
-    }
-
-    public int[][] getEndTime() {
-        return mEndTime;
-    }
-
-    public void setEndTime(int[][] endTime) {
-        this.mEndTime = endTime;
-    }
-
-    public String getEventName() {
-        return mEventName;
-    }
-
-    public void setEventName(String eventName) {
-        this.mEventName = eventName;
-    }
+    private RealmList<EventsTime> time = new RealmList<>();
+    private String eventName;
 
     public int getId() {
         return id;
@@ -47,11 +21,19 @@ public class PvPEvent extends RealmObject{
         this.id = id;
     }
 
-    public String[] getDays() {
-        return mDays;
+    public RealmList<EventsTime> getTime() {
+        return time;
     }
 
-    public void setDays(String... days) {
-        mDays = days;
+    public void setTime(RealmList<EventsTime> time) {
+        this.time = time;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 }

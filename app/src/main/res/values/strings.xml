@@ -28,6 +28,10 @@
     <string name="sn_button">Shugo Nomands Time</string>
 
     <!--Database's names and utils-->
-    <string name="default_database_name">shedule.realm</string>
+    <string name="default_database_name">shedule.db</string>
     <string name="fave_events_database_name">favorites.realm</string>
+
+    <!--Other-->
+    <string name="drawer_open">Opened drawer</string>
+    <string name="drawer_close">drawer closed</string>
 </resources>

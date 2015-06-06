@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
  * Created by Allteran on 6/2/2015.
  */
 public class PreferenceHelper {
+    private static final String IS_FIRST_LAUNCH = "is_first_launch";
     private static PreferenceHelper mInstance;
 
     private SharedPreferences mSharedPreferences;
@@ -22,4 +23,16 @@ public class PreferenceHelper {
         }
         return mInstance;
     }
+
+    public boolean isFirstLaunch() {
+        return mSharedPreferences.getBoolean(IS_FIRST_LAUNCH, true);
+    }
+
+    public void launchFirstTime(boolean isFirstLaunch) {
+        mSharedPreferences.edit()
+                .putBoolean(IS_FIRST_LAUNCH, isFirstLaunch)
+                .apply();
+    }
+
+
 }
