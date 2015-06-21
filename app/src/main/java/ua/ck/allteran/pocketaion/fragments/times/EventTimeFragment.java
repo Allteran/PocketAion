@@ -13,35 +13,32 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
+import ua.ck.allteran.pocketaion.helpers.StopwatchHelper;
 
 /**
  * Created by Alteran on 5/22/2015.
  */
-public class SiegeAndEventTimeFragment extends BasicFragment {
-    private TextView mTimeCurrent, mTime1h, mTime2h, mTime3h,
-            mEventCurrent, mEvent1h, mEvent2h, mEvent3h;
+public class EventTimeFragment extends BasicFragment {
+    private TextView mTimeCurrent, mTime0h, mTime1h, mTime2h,
+            mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
     private AppCompatActivity mActivity;
-    private Realm mRealmSchedule, mRealmFaveEvents;
+    private Realm mRealmFaveEvents;
     private PreferenceHelper mPreferenceHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        mRealmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
         mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
         mPreferenceHelper = PreferenceHelper.getInstance(mActivity);
-        if(mPreferenceHelper.isFirstLaunch()) {
-            new CreateDBTask().execute();
-            mPreferenceHelper.launchFirstTime(false);
-        }
-
     }
 
     @Nullable
@@ -55,15 +52,23 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
+        if (mPreferenceHelper.isFirstLaunch()) {
+            new CreateDBTask().execute();
+            mPreferenceHelper.launchFirstTime(false);
+        }
+
         mTimeCurrent = (TextView) view.findViewById(R.id.time_current);
+        mTime0h = (TextView) view.findViewById(R.id.time_0h);
         mTime1h = (TextView) view.findViewById(R.id.time_1h);
         mTime2h = (TextView) view.findViewById(R.id.time_2h);
-        mTime3h = (TextView) view.findViewById(R.id.time_3h);
 
         mEventCurrent = (TextView) view.findViewById(R.id.event_current);
+        mEvent0h = (TextView) view.findViewById(R.id.event_0h);
         mEvent1h = (TextView) view.findViewById(R.id.event_1h);
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
-        mEvent3h = (TextView) view.findViewById(R.id.event_3h);
+
+        Calendar calendar = Calendar.getInstance();
+        StopwatchHelper.updateTime(mActivity, mTime0h, mTime1h, mTime2h);
     }
 
     @Override
@@ -86,6 +91,7 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
         }
         return true;
     }
+
     private class CreateDBTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -95,15 +101,16 @@ public class SiegeAndEventTimeFragment extends BasicFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
+            Realm realmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
             CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
-            dbHelper.createEventDatabase(mRealmSchedule);
+            dbHelper.createEventDatabase(realmSchedule);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            showSchedule(getView());
+            showContent(getView());
         }
     }
 }

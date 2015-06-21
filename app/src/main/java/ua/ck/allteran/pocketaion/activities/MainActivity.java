@@ -1,7 +1,6 @@
 package ua.ck.allteran.pocketaion.activities;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
@@ -9,19 +8,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
-import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.ShugoNomandMapFragment;
@@ -29,7 +25,7 @@ import ua.ck.allteran.pocketaion.fragments.maps.TreesMapFragment;
 import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
 import ua.ck.allteran.pocketaion.fragments.times.RiftsTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
-import ua.ck.allteran.pocketaion.fragments.times.SiegeAndEventTimeFragment;
+import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
@@ -95,7 +91,7 @@ public class MainActivity extends BasicActivity {
                     case CAT_TIMES:
                         switch (i1) {
                             case SUBCAT_TIMES_SIEGE:
-                                fragment = new SiegeAndEventTimeFragment();
+                                fragment = new EventTimeFragment();
                                 break;
                             case SUBCAT_TIMES_RIFTS:
                                 fragment = new RiftsTimeFragment();
@@ -108,7 +104,7 @@ public class MainActivity extends BasicActivity {
                                 break;
                             default:
                                 return true;
-                        };
+                        }
                         break;
                     case CAT_MAPS:
                         switch (i1) {
@@ -127,7 +123,6 @@ public class MainActivity extends BasicActivity {
                             default:
                                 return true;
                         }
-                        ;
                         break;
                     case CAT_STIGMAS:
                         switch (i1) {

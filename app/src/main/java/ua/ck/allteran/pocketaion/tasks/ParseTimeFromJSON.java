@@ -7,7 +7,7 @@ import org.json.JSONObject;
  * Created by Allteran on 5/28/2015.
  */
 public class ParseTimeFromJSON {
-    private String mParsedTimeHours, mParsedTimeMinutes;
+    private String mParsedTimeHours, mParsedTimeMinutes, mParsedTimeSeconds;
 
     public ParseTimeFromJSON(String jsonObjectInString) {
         parseTime(jsonObjectInString);
@@ -15,6 +15,10 @@ public class ParseTimeFromJSON {
 
     public String getParsedTimeHours() {
         return mParsedTimeHours;
+    }
+
+    public String getParsedTimeSeconds() {
+        return mParsedTimeSeconds;
     }
 
     public String getParsedTimeMinutes() {
@@ -25,14 +29,14 @@ public class ParseTimeFromJSON {
         JSONObject timeToParse;
         try {
             timeToParse = new JSONObject(incTime);
-            String hours = timeToParse.getString("hour");
-            String minutes = timeToParse.getString("minute");
-            mParsedTimeHours = hours;
-            mParsedTimeMinutes = minutes;
+            mParsedTimeHours = timeToParse.getString("hour");
+            mParsedTimeMinutes = timeToParse.getString("minute");
+            mParsedTimeSeconds = timeToParse.getString("second");
         } catch (JSONException e) {
             e.printStackTrace();
             mParsedTimeMinutes = "Error";
             mParsedTimeHours = "Error";
+            mParsedTimeSeconds = "Error";
         }
     }
 }
