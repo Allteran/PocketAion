@@ -39,7 +39,7 @@ public class StopwatchHelper {
                             Calendar instance = Calendar.getInstance();
                             int systemTimeMinutes = 60 - instance.get(Calendar.MINUTE);
                             int systemTimeSeconds = 60 - instance.get(Calendar.SECOND);
-                            String formatedTime = String.format("%2d:%2d", systemTimeMinutes,systemTimeSeconds); //formate this string to display time like '00:03:01'
+                            String formatedTime = String.format("%2d:%2d", systemTimeMinutes,systemTimeSeconds); //format this string to display time like '00:03:01'
                             time[0].setText("00:" + formatedTime);
                             time[1].setText("01:" + formatedTime);
                             time[2].setText("02:" + formatedTime);
