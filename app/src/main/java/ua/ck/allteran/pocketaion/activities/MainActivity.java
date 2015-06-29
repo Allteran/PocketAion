@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -18,14 +19,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
+import ua.ck.allteran.pocketaion.fragments.MainFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.ShugoNomandMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.TreesMapFragment;
 import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
+import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.RiftsTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
-import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
@@ -60,13 +62,14 @@ public class MainActivity extends BasicActivity {
         setContentView(R.layout.activity_main);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         setDrawerElementsName();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mCategoryList = (ExpandableListView) findViewById(R.id.left_drawer);
 
-        mCategoryList.setAdapter(new ExpandableAdapter(this, mCategoryName, mSubcategoryName, mSubcategoryCount));
+        mCategoryList.setAdapter(new ExpandableAdapter(getBaseContext(), mCategoryName, mSubcategoryName, mSubcategoryCount));
         Log.i(TAG, String.valueOf(mCategoryName.size()));
         Log.i(TAG, String.valueOf(mSubcategoryName.size()));
         mCategoryList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -94,7 +97,8 @@ public class MainActivity extends BasicActivity {
                                 fragment = new EventTimeFragment();
                                 break;
                             case SUBCAT_TIMES_RIFTS:
-                                fragment = new RiftsTimeFragment();
+//                                fragment = new RiftsTimeFragment();
+                                fragment = new MainFragment();
                                 break;
                             case SUBCAT_TIMES_TREES:
                                 fragment = new TreesTimeFragment();
@@ -150,13 +154,11 @@ public class MainActivity extends BasicActivity {
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.drawer_open, R.string.drawer_close) {
             @Override
             public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
                 invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
                 invalidateOptionsMenu();
             }
         };
@@ -241,6 +243,7 @@ public class MainActivity extends BasicActivity {
         mSubcategoryName.add(subcategoryMatches);
         mSubcategoryCount.add(subcategoryMatches.size());
     }
+
 
     @Override
     public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {

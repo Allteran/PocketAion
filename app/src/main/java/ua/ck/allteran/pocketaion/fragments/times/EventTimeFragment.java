@@ -13,25 +13,44 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
+import ua.ck.allteran.pocketaion.databases.RealmHelper;
+import ua.ck.allteran.pocketaion.entites.PvPEvent;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 import ua.ck.allteran.pocketaion.helpers.StopwatchHelper;
+import ua.ck.allteran.pocketaion.utilities.Const;
 
 /**
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment {
-    private TextView mTimeCurrent, mTime0h, mTime1h, mTime2h,
+    private TextView mTimeCurrentTextView, mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
+
     private AppCompatActivity mActivity;
-    private Realm mRealmFaveEvents;
     private PreferenceHelper mPreferenceHelper;
+    private StopwatchHelper mStopwatchHelper;
+    private RealmHelper mRealmDatabaseHelper;
+
+    private Realm mRealmFaveEvents;
+    private Realm mRealmSchedule;
+
+    /**
+     * @param mNeededEvents - define 4 events, that will be displayed on screen
+     * @param mAllEvents - define all events that will be stored in inner database
+     */
+    private List<PvPEvent> mNeededEvents;
+    private List<PvPEvent> mAllEvents;
+    private String mDay;
+    private int mTimeHours;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +58,15 @@ public class EventTimeFragment extends BasicFragment {
         mActivity = (MainActivity) getActivity();
         mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
         mPreferenceHelper = PreferenceHelper.getInstance(mActivity);
+        mStopwatchHelper = new StopwatchHelper();
+        mRealmDatabaseHelper = new RealmHelper();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mRealmFaveEvents.close();
+        mRealmSchedule.close();
     }
 
     @Nullable
@@ -51,24 +79,34 @@ public class EventTimeFragment extends BasicFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
+        mActivity.setTitle(R.string.subcategory_time_siege);
+        mAllEvents = null;
 
-        if (mPreferenceHelper.isFirstLaunch()) {
-            new CreateDBTask().execute();
-            mPreferenceHelper.launchFirstTime(false);
-        }
+        new CreateDBTask().execute();
 
-        mTimeCurrent = (TextView) view.findViewById(R.id.time_current);
-        mTime0h = (TextView) view.findViewById(R.id.time_0h);
-        mTime1h = (TextView) view.findViewById(R.id.time_1h);
-        mTime2h = (TextView) view.findViewById(R.id.time_2h);
+        mTimeCurrentTextView = (TextView) view.findViewById(R.id.time_current);
+        mTime0hTextView = (TextView) view.findViewById(R.id.time_0h);
+        mTime1hTextView = (TextView) view.findViewById(R.id.time_1h);
+        mTime2hTextView = (TextView) view.findViewById(R.id.time_2h);
 
         mEventCurrent = (TextView) view.findViewById(R.id.event_current);
         mEvent0h = (TextView) view.findViewById(R.id.event_0h);
         mEvent1h = (TextView) view.findViewById(R.id.event_1h);
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
 
-        Calendar calendar = Calendar.getInstance();
-        StopwatchHelper.updateTime(mActivity, mTime0h, mTime1h, mTime2h);
+        mStopwatchHelper.updateTime(mActivity, mTime0hTextView, mTime1hTextView, mTime2hTextView);
+    }
+
+    public void showNextEvents() {
+        for (int i = 0; i < 4; i++) {
+            mEventCurrent.setText(mNeededEvents
+                    .get(0)
+                    .getEventName());
+            mEvent0h.setText(mNeededEvents.get(1).getEventName());
+            mEvent1h.setText(mNeededEvents.get(2).getEventName());
+            mEvent2h.setText(mNeededEvents.get(3).getEventName());
+        }
+
     }
 
     @Override
@@ -92,6 +130,44 @@ public class EventTimeFragment extends BasicFragment {
         return true;
     }
 
+    public List<PvPEvent> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
+        List<PvPEvent> definedEvents = new ArrayList<>();
+        for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
+            definedEvents.add(i, new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+        }
+        for (PvPEvent event : events) {
+            for (int i = 0; i < event.getTime().size(); i++) {
+                if (day.equals(event.getTime().get(i).getDay())) {
+                    if (serverHour == event.getTime().get(i).getBeginTime()) {
+                        definedEvents.add(0, event);
+                    }
+                    if ((serverHour + 1) == event.getTime().get(i).getBeginTime()) {
+                        definedEvents.add(1, event);
+                    }
+                    if ((serverHour + 2) == event.getTime().get(i).getBeginTime()) {
+                        definedEvents.add(2, event);
+                    }
+                    if ((serverHour + 3) == event.getTime().get(i).getBeginTime()) {
+                        definedEvents.add(3, event); //IndexOutOfBound. Index is 3 size is 2
+                    }
+                }
+            }
+        }
+//        if (currentEvent != null) {
+//            definedEvents.add(currentEvent);
+//        }
+//        if (event1h != null) {
+//            definedEvents.add(event1h);
+//        }
+//        if (event2h != null) {
+//            definedEvents.add(event2h);
+//        }
+//        if (event3h != null) {
+//            definedEvents.add(event3h);
+//        }
+        return definedEvents;
+    }
+
     private class CreateDBTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -101,9 +177,17 @@ public class EventTimeFragment extends BasicFragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Realm realmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
-            CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
-            dbHelper.createEventDatabase(realmSchedule);
+            mRealmSchedule = Realm.getInstance(mActivity, getString(R.string.default_database_name));
+            if (mPreferenceHelper.isFirstLaunch()) {
+                CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
+                dbHelper.createEventDatabase(mRealmSchedule);
+                mPreferenceHelper.launchFirstTime(false);
+            }
+            mStopwatchHelper.getTimeFromNetwork();
+            mDay = mStopwatchHelper.getDay();
+            mTimeHours = mStopwatchHelper.getTimeHours();
+            mAllEvents = mRealmDatabaseHelper.getAllEvents(mRealmSchedule);
+            mNeededEvents = defineNextEvents(mDay, mTimeHours, mAllEvents);
             return null;
         }
 
@@ -111,6 +195,7 @@ public class EventTimeFragment extends BasicFragment {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             showContent(getView());
+            showNextEvents();
         }
     }
 }

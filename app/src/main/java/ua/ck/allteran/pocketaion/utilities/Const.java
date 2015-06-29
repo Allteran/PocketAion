@@ -9,13 +9,16 @@ public class Const {
 
     public static final String TIME_PULL_URL = "http://json-time.appspot.com/time.json?tz=America/Chicago";
 
-    public static final String DAY_MONDAY = "Monday";
-    public static final String DAY_TUESDAY = "Tuesday";
-    public static final String DAY_WEDNESDAY = "Wednesday";
-    public static final String DAY_THURSDAY = "Thursday";
-    public static final String DAY_FRIDAY = "Friday";
-    public static final String DAY_SATURDAY = "Saturday";
-    public static final String DAY_SUNDAY = "Sunday";
+    public static final String DAY_MONDAY = "Mon";
+    public static final String DAY_TUESDAY = "Tue";
+    public static final String DAY_WEDNESDAY = "Wed";
+    public static final String DAY_THURSDAY = "Thu";
+    public static final String DAY_FRIDAY = "Fri";
+    public static final String DAY_SATURDAY = "Sat";
+    public static final String DAY_SUNDAY = "Sun";
+
+    public static final int NO_EVENT_ID = -1;
+    public static final int DISPLAYED_EVENTS_SIZE = 4;
 
     public static class Navigation{
         //category's constants
@@ -38,6 +41,7 @@ public class Const {
 
         //for 'Stigmas' category
         public static final int SUBCAT_STIGMAS_CALCULATE = 0;
+        public static final int TEST_ITEM = 1;
 
     }
 }

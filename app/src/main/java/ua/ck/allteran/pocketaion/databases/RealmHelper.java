@@ -16,17 +16,45 @@ public class RealmHelper {
     public void addEventToDatabase(Realm realm, PvPEvent event) {
         realm.beginTransaction();
 
+        RealmList<EventsTime> eventsTimes = new RealmList<>();
+        for (int i = 0; i < event.getTime().size(); i++) {
+            EventsTime time = realm.createObject(EventsTime.class);
+            time.setBeginTime(event.getTime().get(i).getBeginTime());
+            time.setEndTime(event.getTime().get(i).getEndTime());
+            time.setDay(event.getTime().get(i).getDay());
+            eventsTimes.add(time);
+        }
+
         PvPEvent realmEvent = realm.createObject(PvPEvent.class);
         realmEvent.setId(event.getId());
-        realmEvent.setTime(event.getTime());
+        realmEvent.setTime(eventsTimes);
         realmEvent.setEventName(event.getEventName());
 
         realm.commitTransaction();
     }
 
-    public ArrayList<PvPEvent> getAllEvents(Realm realm) {
-        List<PvPEvent> events = realm.where(PvPEvent.class).findAll();
-        return (ArrayList<PvPEvent>) events;
+    public List<PvPEvent> getAllEvents(Realm realm) {
+        List<PvPEvent> eventsFromDatabase = realm.where(PvPEvent.class).findAll();
+        ArrayList<PvPEvent> pvpEvent = new ArrayList<>();
+        for (int i = 0; i < eventsFromDatabase.size(); i++) {
+            PvPEvent event = new PvPEvent();
+            event.setId(eventsFromDatabase.get(i).getId());
+            event.setEventName(eventsFromDatabase.get(i).getEventName());
+
+            RealmList<EventsTime> eventsTimes = new RealmList<>();
+
+            for (int j = 0; j < eventsFromDatabase.get(i).getTime().size(); j++) {
+                EventsTime time = new EventsTime();
+                time.setBeginTime(eventsFromDatabase.get(i).getTime().get(j).getBeginTime());
+                time.setEndTime(eventsFromDatabase.get(i).getTime().get(j).getEndTime());
+                time.setDay(eventsFromDatabase.get(i).getTime().get(j).getDay());
+                eventsTimes.add(time);
+            }
+
+            event.setTime(eventsTimes);
+            pvpEvent.add(event);
+        }
+        return pvpEvent;
     }
 
     public void deleteEvent(Realm realm, PvPEvent event) {

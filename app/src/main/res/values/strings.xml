@@ -35,4 +35,5 @@
     <string name="drawer_open">Opened drawer</string>
     <string name="drawer_close">drawer closed</string>
     <string name="time_current_text">Open</string>
+    <string name="no_event_name">No event</string>
 </resources>

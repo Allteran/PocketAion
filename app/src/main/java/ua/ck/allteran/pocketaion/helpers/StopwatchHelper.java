@@ -14,21 +14,33 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Allteran on 5/30/2015.
  */
 public class StopwatchHelper {
+    private int mTimeHours;
+    private String mDay;
 
-    public int getTimeFromNetwork() {
+    /**
+     * Warning! Before using fields getters - get whole time from network with getTimeFromNetwork()
+     */
+    public int getTimeHours() {
+        return mTimeHours;
+    }
+
+    public String getDay() {
+        return mDay;
+    }
+
+    public void getTimeFromNetwork() {
         ParseTimeFromJSON timeParser;
         DownloadString downloadedString;
-        int timeHours;
         downloadedString = new DownloadString(Const.TIME_PULL_URL);
         timeParser = new ParseTimeFromJSON(downloadedString.getDownloadedString());
-        timeHours = Integer.valueOf(timeParser.getParsedTimeHours());
-        return timeHours;
+        mTimeHours = Integer.valueOf(timeParser.getParsedTimeHours());
+        mDay = timeParser.getParsedDay();
     }
 
     /**
      * This method will be update time in all TextViews into EventTimeFragment
      */
-    public static void updateTime(final Activity activity, final TextView... time) {
+    public void updateTime(final Activity activity, final TextView... time) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -37,9 +49,9 @@ public class StopwatchHelper {
                         @Override
                         public void run() {
                             Calendar instance = Calendar.getInstance();
-                            int systemTimeMinutes = 60 - instance.get(Calendar.MINUTE);
-                            int systemTimeSeconds = 60 - instance.get(Calendar.SECOND);
-                            String formatedTime = String.format("%2d:%2d", systemTimeMinutes,systemTimeSeconds); //format this string to display time like '00:03:01'
+                            double systemTimeMinutes = (double) 59 - instance.get(Calendar.MINUTE);
+                            double systemTimeSeconds = (double) 59 - instance.get(Calendar.SECOND);
+                            String formatedTime = String.format("%02.0f:%02.0f", systemTimeMinutes, systemTimeSeconds); //format this string to display time like '00:03:01'
                             time[0].setText("00:" + formatedTime);
                             time[1].setText("01:" + formatedTime);
                             time[2].setText("02:" + formatedTime);

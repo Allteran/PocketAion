@@ -13,12 +13,21 @@ public class PvPEvent extends RealmObject {
     private RealmList<EventsTime> time = new RealmList<>();
     private String eventName;
 
-    public int getId() {
-        return id;
+    public PvPEvent() {
+
+    }
+
+    public PvPEvent(int id, String eventName) {
+        this.id = id;
+        this.eventName = eventName;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public RealmList<EventsTime> getTime() {
