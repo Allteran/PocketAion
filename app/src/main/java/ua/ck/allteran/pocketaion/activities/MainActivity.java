@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -61,17 +63,12 @@ public class MainActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
         setDrawerElementsName();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mCategoryList = (ExpandableListView) findViewById(R.id.left_drawer);
 
         mCategoryList.setAdapter(new ExpandableAdapter(getBaseContext(), mCategoryName, mSubcategoryName, mSubcategoryCount));
-        Log.i(TAG, String.valueOf(mCategoryName.size()));
-        Log.i(TAG, String.valueOf(mSubcategoryName.size()));
         mCategoryList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
@@ -146,7 +143,7 @@ public class MainActivity extends BasicActivity {
                             .replace(R.id.container_activity_main, fragment)
                             .commit();
                 }
-                mDrawerLayout.closeDrawers();
+                mDrawerLayout.closeDrawer(mCategoryList);
                 return true;
             }
         });
@@ -164,6 +161,25 @@ public class MainActivity extends BasicActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setDrawerShadow(R.mipmap.drawer_shadow, GravityCompat.START);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        //Do not forget to use this method - it shows 3 lines in ActionBar
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Next lines makes some magic with ND (NavigationDrawer)
+        // tap on ND's icon - it opens or closes (depends on state)
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void setDrawerElementsName() {
@@ -242,13 +258,6 @@ public class MainActivity extends BasicActivity {
         subcategoryMatches.add(subcategoryMatch);
         mSubcategoryName.add(subcategoryMatches);
         mSubcategoryCount.add(subcategoryMatches.size());
-    }
-
-
-    @Override
-    public void onPostCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
-        mDrawerToggle.syncState();
     }
 
     private class ExpandableAdapter extends BaseExpandableListAdapter {

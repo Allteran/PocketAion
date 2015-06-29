@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +32,8 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment {
+    private static final String TAG = EventTimeFragment.class.getSimpleName();
+
     private TextView mTimeCurrentTextView, mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
 
@@ -82,7 +85,7 @@ public class EventTimeFragment extends BasicFragment {
         mActivity.setTitle(R.string.subcategory_time_siege);
         mAllEvents = null;
 
-        new CreateDBTask().execute();
+        new CreateDBAndPullTimeTask().execute();
 
         mTimeCurrentTextView = (TextView) view.findViewById(R.id.time_current);
         mTime0hTextView = (TextView) view.findViewById(R.id.time_0h);
@@ -99,9 +102,7 @@ public class EventTimeFragment extends BasicFragment {
 
     public void showNextEvents() {
         for (int i = 0; i < 4; i++) {
-            mEventCurrent.setText(mNeededEvents
-                    .get(0)
-                    .getEventName());
+            mEventCurrent.setText(mNeededEvents.get(0).getEventName());
             mEvent0h.setText(mNeededEvents.get(1).getEventName());
             mEvent1h.setText(mNeededEvents.get(2).getEventName());
             mEvent2h.setText(mNeededEvents.get(3).getEventName());
@@ -131,13 +132,14 @@ public class EventTimeFragment extends BasicFragment {
     }
 
     public List<PvPEvent> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
+        String[] days = defineDaysLine(day);
         List<PvPEvent> definedEvents = new ArrayList<>();
         for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
             definedEvents.add(i, new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
         }
         for (PvPEvent event : events) {
             for (int i = 0; i < event.getTime().size(); i++) {
-                if (day.equals(event.getTime().get(i).getDay())) {
+                if (days[0].equals(event.getTime().get(i).getDay())) {
                     if (serverHour == event.getTime().get(i).getBeginTime()) {
                         definedEvents.add(0, event);
                     }
@@ -148,27 +150,31 @@ public class EventTimeFragment extends BasicFragment {
                         definedEvents.add(2, event);
                     }
                     if ((serverHour + 3) == event.getTime().get(i).getBeginTime()) {
-                        definedEvents.add(3, event); //IndexOutOfBound. Index is 3 size is 2
+                        definedEvents.add(3, event);
                     }
                 }
             }
         }
-//        if (currentEvent != null) {
-//            definedEvents.add(currentEvent);
-//        }
-//        if (event1h != null) {
-//            definedEvents.add(event1h);
-//        }
-//        if (event2h != null) {
-//            definedEvents.add(event2h);
-//        }
-//        if (event3h != null) {
-//            definedEvents.add(event3h);
-//        }
         return definedEvents;
     }
 
-    private class CreateDBTask extends AsyncTask<Void, Void, Void> {
+    public String[] defineDaysLine(String day) {
+        int shiftPositions = -1;
+        String[] definedDayLine = {Const.DAY_SUNDAY, Const.DAY_MONDAY, Const.DAY_TUESDAY, Const.DAY_WEDNESDAY,
+                Const.DAY_THURSDAY, Const.DAY_FRIDAY, Const.DAY_SATURDAY};
+        for (int i = 0; i < definedDayLine.length; i++) {
+            if (day.equals(definedDayLine[i])) {
+                shiftPositions = i;
+            }
+        }
+        String[] tempArray = new String[definedDayLine.length];
+        System.arraycopy(definedDayLine, shiftPositions, tempArray, 0, definedDayLine.length - shiftPositions);
+        System.arraycopy(definedDayLine, 0, tempArray, definedDayLine.length - shiftPositions, shiftPositions);
+        return tempArray;
+    }
+
+
+    private class CreateDBAndPullTimeTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
