@@ -36,4 +36,6 @@
     <string name="drawer_close">drawer closed</string>
     <string name="time_current_text">Open</string>
     <string name="no_event_name">No event</string>
+    <string name="no_network_message">Seems, you have no network access :(</string>
+    <string name="server_error_message">Ooops, we have some issue with server. Please, try again later</string>
 </resources>

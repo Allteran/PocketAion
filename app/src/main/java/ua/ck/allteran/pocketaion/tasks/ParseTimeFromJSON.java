@@ -39,9 +39,10 @@ public class ParseTimeFromJSON {
             mParsedDay = timeToParse.getString("datetime").substring(0,3);
         } catch (JSONException e) {
             e.printStackTrace();
-            mParsedTimeMinutes = "Error";
-            mParsedTimeHours = "Error";
-            mParsedTimeSeconds = "Error";
+            mParsedTimeMinutes = "61";
+            mParsedTimeHours = "25";
+            mParsedTimeSeconds = "61";
+            mParsedDay = "Error";
         }
     }
 }

@@ -1,10 +1,12 @@
 package ua.ck.allteran.pocketaion.fragments.times;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +36,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
 public class EventTimeFragment extends BasicFragment {
     private static final String TAG = EventTimeFragment.class.getSimpleName();
 
-    private TextView mTimeCurrentTextView, mTime0hTextView, mTime1hTextView, mTime2hTextView,
+    private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
 
     private AppCompatActivity mActivity;
@@ -68,8 +70,12 @@ public class EventTimeFragment extends BasicFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mRealmFaveEvents.close();
-        mRealmSchedule.close();
+        if (mRealmFaveEvents != null) {
+            mRealmFaveEvents.close();
+        }
+        if (mRealmSchedule != null) {
+            mRealmSchedule.close();
+        }
     }
 
     @Nullable
@@ -85,9 +91,8 @@ public class EventTimeFragment extends BasicFragment {
         mActivity.setTitle(R.string.subcategory_time_siege);
         mAllEvents = null;
 
-        new CreateDBAndPullTimeTask().execute();
+        startCreateDBAndPullDataTask();
 
-        mTimeCurrentTextView = (TextView) view.findViewById(R.id.time_current);
         mTime0hTextView = (TextView) view.findViewById(R.id.time_0h);
         mTime1hTextView = (TextView) view.findViewById(R.id.time_1h);
         mTime2hTextView = (TextView) view.findViewById(R.id.time_2h);
@@ -98,16 +103,6 @@ public class EventTimeFragment extends BasicFragment {
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
 
         mStopwatchHelper.updateTime(mActivity, mTime0hTextView, mTime1hTextView, mTime2hTextView);
-    }
-
-    public void showNextEvents() {
-        for (int i = 0; i < 4; i++) {
-            mEventCurrent.setText(mNeededEvents.get(0).getEventName());
-            mEvent0h.setText(mNeededEvents.get(1).getEventName());
-            mEvent1h.setText(mNeededEvents.get(2).getEventName());
-            mEvent2h.setText(mNeededEvents.get(3).getEventName());
-        }
-
     }
 
     @Override
@@ -124,6 +119,7 @@ public class EventTimeFragment extends BasicFragment {
                 Toast.makeText(getActivity(), "Actions show whole schedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_show_favorites:
+                Toast.makeText(getActivity(), "Actions show favorites", Toast.LENGTH_SHORT).show();
                 break;
             default:
                 return true;
@@ -131,15 +127,26 @@ public class EventTimeFragment extends BasicFragment {
         return true;
     }
 
+    public void showNextEvents() {
+        mEventCurrent.setText(mNeededEvents.get(0).getEventName());
+        mEvent0h.setText(mNeededEvents.get(1).getEventName());
+        mEvent1h.setText(mNeededEvents.get(2).getEventName());
+        mEvent2h.setText(mNeededEvents.get(3).getEventName());
+    }
+
     public List<PvPEvent> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
         String[] days = defineDaysLine(day);
         List<PvPEvent> definedEvents = new ArrayList<>();
+        PvPEvent event1, event2, event3;
+        //Fill all defined events with 'Default event'
         for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
             definedEvents.add(i, new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
         }
+
         for (PvPEvent event : events) {
+            String buffDay = days[0];
             for (int i = 0; i < event.getTime().size(); i++) {
-                if (days[0].equals(event.getTime().get(i).getDay())) {
+                if (buffDay.equals(event.getTime().get(i).getDay())) {
                     if (serverHour == event.getTime().get(i).getBeginTime()) {
                         definedEvents.add(0, event);
                     }
@@ -151,6 +158,40 @@ public class EventTimeFragment extends BasicFragment {
                     }
                     if ((serverHour + 3) == event.getTime().get(i).getBeginTime()) {
                         definedEvents.add(3, event);
+                    }
+                }
+                if (serverHour == 21) {
+                    buffDay = days[1];
+                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+                        if (0 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(3, event);
+                        }
+
+                    }
+                }
+                if (serverHour == 22) {
+                    buffDay = days[1];
+                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+                        if (0 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(2, event);
+                        }
+                        if (1 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(3, event);
+                        }
+                    }
+                }
+                if (serverHour == 23) {
+                    buffDay = days[1];
+                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+                        if (0 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(1, event);
+                        }
+                        if (1 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(2, event);
+                        }
+                        if (2 == event.getTime().get(i).getBeginTime()) {
+                            definedEvents.add(3, event);
+                        }
                     }
                 }
             }
@@ -173,6 +214,20 @@ public class EventTimeFragment extends BasicFragment {
         return tempArray;
     }
 
+    public boolean isOnline() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    public void startCreateDBAndPullDataTask() {
+        if (isOnline()) {
+            new CreateDBAndPullTimeTask().execute();
+        } else {
+            showNoContent(getView(), getString(R.string.no_network_message));
+        }
+    }
+
 
     private class CreateDBAndPullTimeTask extends AsyncTask<Void, Void, Void> {
         @Override
@@ -193,15 +248,20 @@ public class EventTimeFragment extends BasicFragment {
             mDay = mStopwatchHelper.getDay();
             mTimeHours = mStopwatchHelper.getTimeHours();
             mAllEvents = mRealmDatabaseHelper.getAllEvents(mRealmSchedule);
-            mNeededEvents = defineNextEvents(mDay, mTimeHours, mAllEvents);
+            mRealmSchedule.close();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            showContent(getView());
-            showNextEvents();
+            if(mDay.equals(Const.DAY_ERROR) || (mTimeHours >= 25)) {
+                showNoContent(getView(), getString(R.string.server_error_message));
+            } else {
+                mNeededEvents = defineNextEvents(mDay, mTimeHours, mAllEvents);
+                showContent(getView());
+                showNextEvents();
+            }
         }
     }
 }

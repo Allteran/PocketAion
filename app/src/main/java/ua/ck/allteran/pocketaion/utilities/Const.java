@@ -19,6 +19,7 @@ public class Const {
 
     public static final int NO_EVENT_ID = -1;
     public static final int DISPLAYED_EVENTS_SIZE = 4;
+    public static final String DAY_ERROR = "Error";
 
     public static class Navigation{
         //category's constants
