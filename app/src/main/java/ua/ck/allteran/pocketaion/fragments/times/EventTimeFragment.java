@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +52,7 @@ public class EventTimeFragment extends BasicFragment {
      * @param mNeededEvents - define 4 events, that will be displayed on screen
      * @param mAllEvents - define all events that will be stored in inner database
      */
-    private List<PvPEvent> mNeededEvents;
+    private List<List<PvPEvent>> mNeededEvents;
     private List<PvPEvent> mAllEvents;
     private String mDay;
     private int mTimeHours;
@@ -91,7 +92,7 @@ public class EventTimeFragment extends BasicFragment {
         mActivity.setTitle(R.string.subcategory_time_siege);
         mAllEvents = null;
 
-        startCreateDBAndPullDataTask();
+        startInnerAsyncTask();
 
         mTime0hTextView = (TextView) view.findViewById(R.id.time_0h);
         mTime1hTextView = (TextView) view.findViewById(R.id.time_1h);
@@ -127,76 +128,255 @@ public class EventTimeFragment extends BasicFragment {
         return true;
     }
 
-    public void showNextEvents() {
-        mEventCurrent.setText(mNeededEvents.get(0).getEventName());
-        mEvent0h.setText(mNeededEvents.get(1).getEventName());
-        mEvent1h.setText(mNeededEvents.get(2).getEventName());
-        mEvent2h.setText(mNeededEvents.get(3).getEventName());
+    public void cleanUpEvents(List<List<PvPEvent>> events) {
+        List<PvPEvent> innerList = new ArrayList<>();
+        innerList.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+        for (int i = 0; i < events.size(); i++) {
+            if (events.get(i).size() == 10) {
+                events.remove(i);
+                events.add(i, innerList);
+            }
+        }
     }
 
-    public List<PvPEvent> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
+    public void showNextEvents() {
+        String textToShowCurrent = "";
+        String textToShow0h = "";
+        String textToShow1h = "";
+        String textToShow2h = "";
+        for (int i = 0; i < mNeededEvents.get(0).size(); i++) {
+            textToShowCurrent += mNeededEvents.get(0).get(i).getEventName() + "";
+        }
+        for (int i = 0; i < mNeededEvents.get(1).size(); i++) {
+            textToShow0h += mNeededEvents.get(1).get(i).getEventName() + "";
+        }
+        for (int i = 0; i < mNeededEvents.get(2).size(); i++) {
+            textToShow1h += mNeededEvents.get(2).get(i).getEventName() + "";
+        }
+        for (int i = 0; i < mNeededEvents.get(3).size(); i++) {
+            textToShow2h += mNeededEvents.get(3).get(i).getEventName() + "";
+        }
+        mEventCurrent.setText(textToShowCurrent);
+        mEvent0h.setText(textToShow0h);
+        mEvent1h.setText(textToShow1h);
+        mEvent2h.setText(textToShow2h);
+    }
+
+    /**
+     * Next method do some really hard BDSM games with data.
+     * To display all events that could be up now - I use 2-dimensional lists. Inner
+     */
+    public List<List<PvPEvent>> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
         String[] days = defineDaysLine(day);
-        List<PvPEvent> definedEvents = new ArrayList<>();
-        PvPEvent event1, event2, event3;
+//        List<List<PvPEvent>> definedEvents = new ArrayList<>();
+//        List<PvPEvent> innerEvents;
         //Fill all defined events with 'Default event'
-        for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
-            definedEvents.add(i, new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+//        for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
+//            innerEvents = new ArrayList<>();
+//            for (int j = 0; j < 10; j++) {
+//                innerEvents.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+//            }
+//            definedEvents.add(innerEvents);
+//        }
+
+        List<List<PvPEvent>> testDefinedEvents = new ArrayList<>();
+        List<PvPEvent> innerEventsCurrent = new ArrayList<>();
+        List<PvPEvent> innerEvents1h = new ArrayList<>();
+        List<PvPEvent> innerEvents2h = new ArrayList<>();
+        List<PvPEvent> innerEvents3h = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            innerEventsCurrent.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+            innerEvents1h.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+            innerEvents2h.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
+            innerEvents3h.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
         }
 
-        for (PvPEvent event : events) {
-            String buffDay = days[0];
-            for (int i = 0; i < event.getTime().size(); i++) {
-                if (buffDay.equals(event.getTime().get(i).getDay())) {
-                    if (serverHour == event.getTime().get(i).getBeginTime()) {
-                        definedEvents.add(0, event);
+        for (PvPEvent e : events) {
+            String currentDay = days[0];
+            for (int i = 0; i < e.getTime().size(); i++) {
+                if (currentDay.equals(e.getTime().get(i).getDay())) {
+                    if (serverHour == e.getTime().get(i).getBeginTime()) {
+                        if (innerEventsCurrent.size() == 10) {
+                            innerEventsCurrent.clear();
+                        }
+                        innerEventsCurrent.add(e);
                     }
-                    if ((serverHour + 1) == event.getTime().get(i).getBeginTime()) {
-                        definedEvents.add(1, event);
+                    if ((serverHour + 1) == e.getTime().get(i).getBeginTime()) {
+                        if (innerEvents1h.size() == 10) {
+                            innerEvents1h.clear();
+                        }
+                        innerEvents1h.add(e);
                     }
-                    if ((serverHour + 2) == event.getTime().get(i).getBeginTime()) {
-                        definedEvents.add(2, event);
+                    if ((serverHour + 2) == e.getTime().get(i).getBeginTime()) {
+                        if (innerEvents2h.size() == 10) {
+                            innerEvents2h.clear();
+                        }
+                        innerEvents2h.add(e);
                     }
-                    if ((serverHour + 3) == event.getTime().get(i).getBeginTime()) {
-                        definedEvents.add(3, event);
+                    if ((serverHour + 3) == e.getTime().get(i).getBeginTime()) {
+                        if (innerEvents3h.size() == 10) {
+                            innerEvents3h.clear();
+                        }
+                        innerEvents3h.add(e);
                     }
                 }
-                if (serverHour == 21) {
-                    buffDay = days[1];
-                    if (buffDay.equals(event.getTime().get(i).getDay())) {
-                        if (0 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(3, event);
-                        }
 
+                if (serverHour == 21) {
+                    currentDay = days[1];
+                    if (currentDay.equals(e.getTime().get(i).getDay())) {
+                        if (0 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents3h.size() == 10) {
+                                innerEvents3h.clear();
+                            }
+                            innerEvents3h.add(e);
+                        }
                     }
                 }
                 if (serverHour == 22) {
-                    buffDay = days[1];
-                    if (buffDay.equals(event.getTime().get(i).getDay())) {
-                        if (0 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(2, event);
+                    currentDay = days[1];
+                    if (currentDay.equals(e.getTime().get(i).getDay())) {
+                        if (0 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents3h.size() == 10) {
+                                innerEvents3h.clear();
+                            }
+                            innerEvents3h.add(e);
                         }
-                        if (1 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(3, event);
+                        if (1 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents2h.size() == 10) {
+                                innerEvents2h.clear();
+                            }
+                            innerEvents2h.add(e);
                         }
                     }
                 }
                 if (serverHour == 23) {
-                    buffDay = days[1];
-                    if (buffDay.equals(event.getTime().get(i).getDay())) {
-                        if (0 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(1, event);
+                    currentDay = days[1];
+                    if (currentDay.equals(e.getTime().get(i).getDay())) {
+                        if (0 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents3h.size() == 10) {
+                                innerEvents3h.clear();
+                            }
+                            innerEvents3h.add(e);
                         }
-                        if (1 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(2, event);
+                        if (1 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents2h.size() == 10) {
+                                innerEvents2h.clear();
+                            }
+                            innerEvents2h.add(e);
                         }
-                        if (2 == event.getTime().get(i).getBeginTime()) {
-                            definedEvents.add(3, event);
+                        if (2 == e.getTime().get(i).getBeginTime()) {
+                            if (innerEvents1h.size() == 10) {
+                                innerEvents1h.clear();
+                            }
+                            innerEvents1h.add(e);
                         }
                     }
                 }
             }
         }
-        return definedEvents;
+
+        testDefinedEvents.add(0, innerEventsCurrent);
+        testDefinedEvents.add(1, innerEvents1h);
+        testDefinedEvents.add(2, innerEvents2h);
+        testDefinedEvents.add(3, innerEvents3h);
+
+
+//        for (PvPEvent event : events) {
+//            String buffDay = days[0];
+//            for (int i = 0; i < event.getTime().size(); i++) {
+//                innerEvents = new ArrayList<>();
+//                if (buffDay.equals(event.getTime().get(i).getDay())) {
+//                    if (serverHour == event.getTime().get(i).getBeginTime()) {
+//                        innerEvents.add(event);
+//                        if (definedEvents.get(0).size() == 10) {
+//                            definedEvents.remove(0);
+//                        }
+//                        definedEvents.add(0, innerEvents);
+//                    }
+//                    if ((serverHour + 1) == event.getTime().get(i).getBeginTime()) {
+//                        innerEvents.add(event);
+//                        if (definedEvents.get(1).size() == 10) {
+//                            definedEvents.remove(1);
+//                        }
+//                        definedEvents.add(1, innerEvents);
+//                    }
+//                    if ((serverHour + 2) == event.getTime().get(i).getBeginTime()) {
+//                        innerEvents.add(event);
+//                        if (definedEvents.get(2).size() == 10) {
+//                            definedEvents.remove(2);
+//                        }
+//                        definedEvents.add(2, innerEvents);
+//                    }
+//                    if ((serverHour + 3) == event.getTime().get(i).getBeginTime()) {
+//                        innerEvents.add(event);
+//                        if (definedEvents.get(3).size() == 10) {
+//                            definedEvents.remove(3);
+//                        }
+//                        definedEvents.add(3, innerEvents);
+//                    }
+//                }
+//                if (serverHour == 21) {
+//                    buffDay = days[1];
+//                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+//                        if (0 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(3).size() == 10) {
+//                                definedEvents.remove(3);
+//                            }
+//                            definedEvents.add(3, innerEvents);
+//                        }
+//
+//                    }
+//                }
+//                if (serverHour == 22) {
+//                    buffDay = days[1];
+//                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+//                        if (0 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(2).size() == 10) {
+//                                definedEvents.remove(2);
+//                            }
+//                            definedEvents.add(2, innerEvents);
+//                        }
+//                        if (1 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(3).size() == 10) {
+//                                definedEvents.remove(3);
+//                            }
+//                            definedEvents.add(3, innerEvents);
+//                        }
+//                    }
+//                }
+//                if (serverHour == 23) {
+//                    buffDay = days[1];
+//                    if (buffDay.equals(event.getTime().get(i).getDay())) {
+//                        if (0 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(1).size() == 10) {
+//                                definedEvents.remove(1);
+//                            }
+//                            definedEvents.add(1, innerEvents);
+//                        }
+//                        if (1 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(2).size() == 10) {
+//                                definedEvents.remove(2);
+//                            }
+//                            definedEvents.add(2, innerEvents);
+//                        }
+//                        if (2 == event.getTime().get(i).getBeginTime()) {
+//                            innerEvents.add(event);
+//                            if (definedEvents.get(3).size() == 10) {
+//                                definedEvents.remove(3);
+//                            }
+//                            definedEvents.add(3, innerEvents);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+        return testDefinedEvents;
     }
 
     public String[] defineDaysLine(String day) {
@@ -214,13 +394,25 @@ public class EventTimeFragment extends BasicFragment {
         return tempArray;
     }
 
+    public void debugMethod() {
+        for (int i = 0; i < Const.DISPLAYED_EVENTS_SIZE; i++) {
+            for (int j = 0; j < 10; j++) {
+                Log.i(TAG,
+                        mNeededEvents
+                                .get(i)
+                                .get(j)
+                                .getEventName());
+            }
+        }
+    }
+
     public boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
 
-    public void startCreateDBAndPullDataTask() {
+    public void startInnerAsyncTask() {
         if (isOnline()) {
             new CreateDBAndPullTimeTask().execute();
         } else {
@@ -246,7 +438,7 @@ public class EventTimeFragment extends BasicFragment {
             }
             mStopwatchHelper.getTimeFromNetwork();
             mDay = mStopwatchHelper.getDay();
-            mTimeHours = mStopwatchHelper.getTimeHours();
+            mTimeHours = 4;// mStopwatchHelper.getTimeHours();
             mAllEvents = mRealmDatabaseHelper.getAllEvents(mRealmSchedule);
             mRealmSchedule.close();
             return null;
@@ -255,10 +447,11 @@ public class EventTimeFragment extends BasicFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(mDay.equals(Const.DAY_ERROR) || (mTimeHours >= 25)) {
+            if (mDay.equals(Const.DAY_ERROR)) {
                 showNoContent(getView(), getString(R.string.server_error_message));
             } else {
                 mNeededEvents = defineNextEvents(mDay, mTimeHours, mAllEvents);
+                cleanUpEvents(mNeededEvents);
                 showContent(getView());
                 showNextEvents();
             }
