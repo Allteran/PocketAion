@@ -3,6 +3,8 @@ package ua.ck.allteran.pocketaion.tasks;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ua.ck.allteran.pocketaion.utilities.Const;
+
 /**
  * Created by Allteran on 5/28/2015.
  */
@@ -42,7 +44,7 @@ public class ParseTimeFromJSON {
             mParsedTimeMinutes = "61";
             mParsedTimeHours = "25";
             mParsedTimeSeconds = "61";
-            mParsedDay = "Error";
+            mParsedDay = Const.DAY_ERROR;
         }
     }
 }

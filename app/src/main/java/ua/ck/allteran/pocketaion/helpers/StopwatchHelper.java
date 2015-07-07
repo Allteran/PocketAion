@@ -6,37 +6,10 @@ import android.widget.TextView;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-import ua.ck.allteran.pocketaion.tasks.DownloadString;
-import ua.ck.allteran.pocketaion.tasks.ParseTimeFromJSON;
-import ua.ck.allteran.pocketaion.utilities.Const;
-
 /**
  * Created by Allteran on 5/30/2015.
  */
 public class StopwatchHelper {
-    private int mTimeHours;
-    private String mDay;
-
-    /**
-     * Warning! Before using fields getters - get whole time from network with getTimeFromNetwork()
-     */
-    public int getTimeHours() {
-        return mTimeHours;
-    }
-
-    public String getDay() {
-        return mDay;
-    }
-
-    public void getTimeFromNetwork() {
-        ParseTimeFromJSON timeParser;
-        DownloadString downloadedString;
-        downloadedString = new DownloadString(Const.TIME_PULL_URL);
-        timeParser = new ParseTimeFromJSON(downloadedString.getDownloadedString());
-        mTimeHours = Integer.valueOf(timeParser.getParsedTimeHours());
-        mDay = timeParser.getParsedDay();
-    }
-
     /**
      * This method will be update time in all TextViews into EventTimeFragment
      */
