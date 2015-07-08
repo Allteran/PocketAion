@@ -5,12 +5,17 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
@@ -28,7 +33,6 @@ import ua.ck.allteran.pocketaion.utilities.Const;
 public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<LoaderResult> {
 
     public static final String URL_EXTRA = "link_for_time";
-    private static final String TAG = "Loader_TimeZONE";
     private Context mContext;
     private String mUrl;
 
@@ -56,21 +60,19 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
 
         loaderResult.setAllEvents(new RealmHelper().getAllEvents(realm));
 
-        StringBuilder stringBuilder = new StringBuilder();
+        OkHttpClient client = new OkHttpClient();
+        String timeFromNetwork = "";
         try {
-            URL url = new URL(mUrl);
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
-            String buffString;
-            while ((buffString = bufferedReader.readLine()) != null) {
-                stringBuilder.append(buffString);
-            }
-        } catch (IOException e) {
-            //when server is down - get time from device
-            e.printStackTrace();
-
+            Request request = new Request.Builder()
+                    .url(mUrl)
+                    .build();
+            Response response = client.newCall(request).execute();
+            timeFromNetwork = response.body().string();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
-        loaderResult.setTimeFromNetwork(stringBuilder.toString());
+        loaderResult.setTimeFromNetwork(timeFromNetwork);
         realm.close();
         return loaderResult;
     }

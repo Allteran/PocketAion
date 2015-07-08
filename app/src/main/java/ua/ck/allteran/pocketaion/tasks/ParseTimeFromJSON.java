@@ -1,5 +1,7 @@
 package ua.ck.allteran.pocketaion.tasks;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,6 +11,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Allteran on 5/28/2015.
  */
 public class ParseTimeFromJSON {
+    private static final String TAG = "ParseJson";
     private String mParsedTimeHours, mParsedTimeMinutes, mParsedTimeSeconds, mParsedDay;
 
     public ParseTimeFromJSON(String jsonObjectInString) {
@@ -35,10 +38,10 @@ public class ParseTimeFromJSON {
         JSONObject timeToParse;
         try {
             timeToParse = new JSONObject(incTime);
-            mParsedTimeHours = timeToParse.getString("hour");
-            mParsedTimeMinutes = timeToParse.getString("minute");
-            mParsedTimeSeconds = timeToParse.getString("second");
-            mParsedDay = timeToParse.getString("datetime").substring(0,3);
+            mParsedTimeHours = timeToParse.getString("hours");
+            mParsedTimeMinutes = timeToParse.getString("minutes");
+            mParsedTimeSeconds = timeToParse.getString("seconds");
+            mParsedDay = timeToParse.getString("fulldate").substring(0,3);
         } catch (JSONException e) {
             e.printStackTrace();
             mParsedTimeMinutes = "61";

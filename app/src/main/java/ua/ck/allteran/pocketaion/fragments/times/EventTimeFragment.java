@@ -47,10 +47,9 @@ public class EventTimeFragment extends BasicFragment implements
     private RealmHelper mRealmDatabaseHelper;
 
     private Realm mRealmFaveEvents;
-    private Realm mRealmSchedule;
 
     /**
-     * @param mNeededEvents - define 4 events, that will be displayed on screen
+     * @param mNeededEvents - define displayed events
      * @param mAllEvents - define all events that will be stored in inner database
      */
     private List<List<PvPEvent>> mNeededEvents;
@@ -74,9 +73,6 @@ public class EventTimeFragment extends BasicFragment implements
         super.onDestroy();
         if (mRealmFaveEvents != null) {
             mRealmFaveEvents.close();
-        }
-        if (mRealmSchedule != null) {
-            mRealmSchedule.close();
         }
     }
 
@@ -170,7 +166,8 @@ public class EventTimeFragment extends BasicFragment implements
 
     /**
      * Next method do some really hard BDSM games with data.
-     * To display all events that could be up now - I use 2-dimensional lists. Inner
+     * To display all events that could be up now - I use 2-dimensional lists. Outer list has fixed
+     * size - 4. Inner list(s) has unfixed size, cause there can be more than one event at one time
      */
     public List<List<PvPEvent>> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
         String[] days = defineDaysLine(day);
@@ -280,6 +277,9 @@ public class EventTimeFragment extends BasicFragment implements
         return testDefinedEvents;
     }
 
+    /**
+     * This method define next day according to current day.
+     */
     public String[] defineDaysLine(String day) {
         int shiftPositions = -1;
         String[] definedDayLine = {Const.DAY_SUNDAY, Const.DAY_MONDAY, Const.DAY_TUESDAY, Const.DAY_WEDNESDAY,
