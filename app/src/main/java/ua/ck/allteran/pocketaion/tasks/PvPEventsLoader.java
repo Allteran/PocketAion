@@ -33,6 +33,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
 public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<LoaderResult> {
 
     public static final String URL_EXTRA = "link_for_time";
+    private static final String TAG = "TimeZone_TAG: ";
     private Context mContext;
     private String mUrl;
 
@@ -70,10 +71,39 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
             timeFromNetwork = response.body().string();
         } catch (IOException ex) {
             ex.printStackTrace();
+            Calendar calendar = Calendar.getInstance();
+            String nativeTimeZone = calendar.getTimeZone().getID();
+
+            calendar.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+            timeFromNetwork = "{\"fulldate\":\"" + getDayInString(calendar.get(Calendar.DAY_OF_WEEK)) + "\",\"hours\":" +
+                    calendar.get(Calendar.HOUR_OF_DAY) + ",\"minutes\":" + calendar.get(Calendar.MINUTE) + ",\"seconds\":" + calendar.get(Calendar.SECOND) + "}";
+            Log.i(TAG, timeFromNetwork);
+            calendar.setTimeZone(TimeZone.getTimeZone(nativeTimeZone));
         }
 
         loaderResult.setTimeFromNetwork(timeFromNetwork);
         realm.close();
         return loaderResult;
+    }
+
+    private String getDayInString(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case 1:
+                return Const.DAY_SUNDAY;
+            case 2:
+                return Const.DAY_MONDAY;
+            case 3:
+                return Const.DAY_TUESDAY;
+            case 4:
+                return Const.DAY_WEDNESDAY;
+            case 5:
+                return Const.DAY_THURSDAY;
+            case 6:
+                return Const.DAY_FRIDAY;
+            case 7:
+                return Const.DAY_SATURDAY;
+            default:
+                return Const.DAY_ERROR;
+        }
     }
 }

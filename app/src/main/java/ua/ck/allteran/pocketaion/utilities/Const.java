@@ -6,7 +6,7 @@ package ua.ck.allteran.pocketaion.utilities;
 public class Const {
     public static final int PVP_EVENT_LOADER_ID = 1;
 
-    public static final String TIME_PULL_URL = "https://script.googleusercontent.com/macros/echo?user_content_key=IMmRWMD_qUVDFUnbq-BmJAbHjoFoHuQBNgH4qHtJ88BklybxMxbzCT1KnvcuHHbEEQL7p_9V3jgM2dxkgp9wo8UjyWzdoPHZm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnJ9GRkcRevgjTvo8Dc32iw_BLJPcPfRdVKhJT5HNzQuXEeN3QFwl2n0M6ZmO-h7C6bwVq0tbM60-_IQDS8gp7-x-dZ28mtWEA5GNj-qTZ_41&lib=MwxUjRcLr2qLlnVOLh12wSNkqcO1Ikdrk";
+    public static final String TIME_PULL_URL ="https://lallka.com.net/time"; //"https://script.googleusercontent.com/macros/echo?user_content_key=IMmRWMD_qUVDFUnbq-BmJAbHjoFoHuQBNgH4qHtJ88BklybxMxbzCT1KnvcuHHbEEQL7p_9V3jgM2dxkgp9wo8UjyWzdoPHZm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnJ9GRkcRevgjTvo8Dc32iw_BLJPcPfRdVKhJT5HNzQuXEeN3QFwl2n0M6ZmO-h7C6bwVq0tbM60-_IQDS8gp7-x-dZ28mtWEA5GNj-qTZ_41&lib=MwxUjRcLr2qLlnVOLh12wSNkqcO1Ikdrk";
 
     public static final String DAY_MONDAY = "Mon";
     public static final String DAY_TUESDAY = "Tue";
