@@ -5,7 +5,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,8 +37,8 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment implements
-        android.support.v4.app.LoaderManager.LoaderCallbacks<LoaderResult> {
-    private static final String TAG = EventTimeFragment.class.getSimpleName();
+        LoaderManager.LoaderCallbacks<LoaderResult> {
+    private static final String TAG = "Line_text_test";
 
     private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
@@ -100,6 +102,8 @@ public class EventTimeFragment extends BasicFragment implements
         mEvent1h = (TextView) view.findViewById(R.id.event_1h);
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
 
+        //TODO: OnLongClickListener for events
+
         mStopwatchHelper.updateTime(mActivity, mTime0hTextView, mTime1hTextView, mTime2hTextView);
 
         Bundle dataForLoader = new Bundle();
@@ -147,16 +151,29 @@ public class EventTimeFragment extends BasicFragment implements
         String textToShow1h = "";
         String textToShow2h = "";
         for (int i = 0; i < mNeededEvents.get(0).size(); i++) {
-            textToShowCurrent += mNeededEvents.get(0).get(i).getEventName() + "";
+            textToShowCurrent += mNeededEvents.get(0).get(i).getEventName() + ", ";
+            if (i == mNeededEvents.get(0).size() - 1) {
+                textToShowCurrent = textToShowCurrent.substring(0, textToShowCurrent.toCharArray().length - 2) + ".";
+            }
         }
         for (int i = 0; i < mNeededEvents.get(1).size(); i++) {
-            textToShow0h += mNeededEvents.get(1).get(i).getEventName() + "";
+            textToShow0h += mNeededEvents.get(1).get(i).getEventName() + ", ";
+            if (i == mNeededEvents.get(1).size() - 1) {
+                textToShow0h = textToShow0h.substring(0, textToShow0h.toCharArray().length - 2) + ".";
+            }
         }
         for (int i = 0; i < mNeededEvents.get(2).size(); i++) {
-            textToShow1h += mNeededEvents.get(2).get(i).getEventName() + "";
+            textToShow1h += mNeededEvents.get(2).get(i).getEventName() + ", ";
+            if (i == mNeededEvents.get(2).size() - 1) {
+                textToShow1h = textToShow1h.substring(0, textToShow1h.toCharArray().length - 2) + ".";
+            }
         }
         for (int i = 0; i < mNeededEvents.get(3).size(); i++) {
-            textToShow2h += mNeededEvents.get(3).get(i).getEventName() + "";
+            textToShow2h += mNeededEvents.get(3).get(i).getEventName() + ", ";
+            if (i == mNeededEvents.get(3).size() - 1) {
+                textToShow2h = textToShow2h.substring(0, textToShow2h.toCharArray().length - 2) + ".";
+            }
+
         }
         mEventCurrent.setText(textToShowCurrent);
         mEvent0h.setText(textToShow0h);
@@ -169,7 +186,8 @@ public class EventTimeFragment extends BasicFragment implements
      * To display all events that could be up now - I use 2-dimensional lists. Outer list has fixed
      * size - 4. Inner list(s) has unfixed size, cause there can be more than one event at one time
      */
-    public List<List<PvPEvent>> defineNextEvents(String day, int serverHour, List<PvPEvent> events) {
+    public List<List<PvPEvent>> defineNextEvents(String day, int serverHour, List<
+            PvPEvent> events) {
         String[] days = defineDaysLine(day);
 
         List<List<PvPEvent>> testDefinedEvents = new ArrayList<>();
@@ -189,25 +207,33 @@ public class EventTimeFragment extends BasicFragment implements
             String currentDay = days[0];
             for (int i = 0; i < e.getTime().size(); i++) {
                 if (currentDay.equals(e.getTime().get(i).getDay())) {
-                    if (serverHour == e.getTime().get(i).getBeginTime()) {
+                    if (serverHour == e.getTime().get(i).getBeginTime() ||
+                            (e.getTime().get(i).getBeginTime() < serverHour && e.getTime().get(i).getEndTime() > serverHour) &&
+                                    e.getTime().get(i).getEndTime() < serverHour + 3) {
                         if (innerEventsCurrent.size() == 10) {
                             innerEventsCurrent.clear();
                         }
                         innerEventsCurrent.add(e);
                     }
-                    if ((serverHour + 1) == e.getTime().get(i).getBeginTime()) {
+                    if ((serverHour + 1) == e.getTime().get(i).getBeginTime() ||
+                            (e.getTime().get(i).getBeginTime() < (serverHour + 1) && e.getTime().get(i).getEndTime() > (serverHour + 1) &&
+                                    e.getTime().get(i).getEndTime() < serverHour + 4)) {
                         if (innerEvents1h.size() == 10) {
                             innerEvents1h.clear();
                         }
                         innerEvents1h.add(e);
                     }
-                    if ((serverHour + 2) == e.getTime().get(i).getBeginTime()) {
+                    if ((serverHour + 2) == e.getTime().get(i).getBeginTime() ||
+                            (e.getTime().get(i).getBeginTime() < (serverHour + 2) && e.getTime().get(i).getEndTime() > (serverHour + 2) &&
+                                    e.getTime().get(i).getEndTime() < serverHour + 5)) {
                         if (innerEvents2h.size() == 10) {
                             innerEvents2h.clear();
                         }
                         innerEvents2h.add(e);
                     }
-                    if ((serverHour + 3) == e.getTime().get(i).getBeginTime()) {
+                    if ((serverHour + 3) == e.getTime().get(i).getBeginTime() ||
+                            (e.getTime().get(i).getBeginTime() < (serverHour + 3) && e.getTime().get(i).getEndTime() > (serverHour + 3) &&
+                                    e.getTime().get(i).getEndTime() < serverHour + 6)) {
                         if (innerEvents3h.size() == 10) {
                             innerEvents3h.clear();
                         }
@@ -218,7 +244,8 @@ public class EventTimeFragment extends BasicFragment implements
                 if (serverHour == 21) {
                     currentDay = days[1];
                     if (currentDay.equals(e.getTime().get(i).getDay())) {
-                        if (0 == e.getTime().get(i).getBeginTime()) {
+                        if (0 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents3h.size() == 10) {
                                 innerEvents3h.clear();
                             }
@@ -229,13 +256,15 @@ public class EventTimeFragment extends BasicFragment implements
                 if (serverHour == 22) {
                     currentDay = days[1];
                     if (currentDay.equals(e.getTime().get(i).getDay())) {
-                        if (0 == e.getTime().get(i).getBeginTime()) {
+                        if (0 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents3h.size() == 10) {
                                 innerEvents3h.clear();
                             }
                             innerEvents3h.add(e);
                         }
-                        if (1 == e.getTime().get(i).getBeginTime()) {
+                        if (1 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents2h.size() == 10) {
                                 innerEvents2h.clear();
                             }
@@ -246,19 +275,22 @@ public class EventTimeFragment extends BasicFragment implements
                 if (serverHour == 23) {
                     currentDay = days[1];
                     if (currentDay.equals(e.getTime().get(i).getDay())) {
-                        if (0 == e.getTime().get(i).getBeginTime()) {
+                        if (0 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents3h.size() == 10) {
                                 innerEvents3h.clear();
                             }
                             innerEvents3h.add(e);
                         }
-                        if (1 == e.getTime().get(i).getBeginTime()) {
+                        if (1 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents2h.size() == 10) {
                                 innerEvents2h.clear();
                             }
                             innerEvents2h.add(e);
                         }
-                        if (2 == e.getTime().get(i).getBeginTime()) {
+                        if (2 == e.getTime().get(i).getBeginTime() ||
+                                (e.getTime().get(i).getEndTime() == 2)) {
                             if (innerEvents1h.size() == 10) {
                                 innerEvents1h.clear();
                             }
@@ -340,7 +372,6 @@ public class EventTimeFragment extends BasicFragment implements
     public void onLoaderReset(android.support.v4.content.Loader<LoaderResult> loader) {
 
     }
-
 
 }
 

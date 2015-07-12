@@ -5,99 +5,136 @@
     android:orientation="vertical"
     android:padding="@dimen/main_screen_padding">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/time_event_current"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
             <TextView
                 android:id="@+id/time_current"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_weight="1.0"
                 android:padding="10dp"
+                android:singleLine="true"
                 android:text="@string/time_current_text" />
 
             <TextView
                 android:id="@+id/event_current"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/time_current"
+                android:layout_toRightOf="@+id/time_current"
                 android:padding="10dp"
                 android:text="Event" />
+        </RelativeLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/time_event_0h"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_event_current"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/time_0h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_weight="1.0"
                 android:padding="10dp"
-                android:text="Time" />
+                android:singleLine="true"
+                android:text="@string/time_current_text" />
 
             <TextView
                 android:id="@+id/event_0h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/time_0h"
+                android:layout_toRightOf="@+id/time_0h"
                 android:padding="10dp"
                 android:text="Event" />
-
-        </LinearLayout>
-
-        <LinearLayout
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/time_event_1h"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_event_0h"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/time_1h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_weight="1.0"
                 android:padding="10dp"
-                android:text="Time" />
+                android:singleLine="true"
+                android:text="@string/time_current_text" />
 
             <TextView
                 android:id="@+id/event_1h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/time_1h"
+                android:layout_toRightOf="@+id/time_1h"
                 android:padding="10dp"
                 android:text="Event" />
-        </LinearLayout>
 
-        <LinearLayout
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/time_event_2h"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/time_event_1h"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <TextView
                 android:id="@+id/time_2h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:layout_weight="1.0"
                 android:padding="10dp"
-                android:text="Time" />
+                android:singleLine="true"
+                android:text="@string/time_current_text" />
 
             <TextView
                 android:id="@+id/event_2h"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.0"
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@+id/time_2h"
+                android:layout_toRightOf="@+id/time_2h"
                 android:padding="10dp"
                 android:text="Event" />
-
-        </LinearLayout>
-    </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/loading_bar_container"
@@ -105,11 +142,11 @@
         android:layout_height="match_parent">
 
         <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:indeterminate="true"/>
     </RelativeLayout>
 
     <RelativeLayout

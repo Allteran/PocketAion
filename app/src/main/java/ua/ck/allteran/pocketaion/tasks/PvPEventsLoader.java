@@ -75,6 +75,8 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
             String nativeTimeZone = calendar.getTimeZone().getID();
 
             calendar.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+            //TODO: check, if there difference in days depends on current time (there shouldn't be like it's 1 am CDT, day is Sun, but displaying Sat (cuz Eu/Kiev has other time)
+
             timeFromNetwork = "{\"fulldate\":\"" + getDayInString(calendar.get(Calendar.DAY_OF_WEEK)) + "\",\"hours\":" +
                     calendar.get(Calendar.HOUR_OF_DAY) + ",\"minutes\":" + calendar.get(Calendar.MINUTE) + ",\"seconds\":" + calendar.get(Calendar.SECOND) + "}";
             Log.i(TAG, timeFromNetwork);
