@@ -1,11 +1,14 @@
 package ua.ck.allteran.pocketaion.fragments.times;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +41,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment implements
-        LoaderManager.LoaderCallbacks<LoaderResult> {
+        LoaderManager.LoaderCallbacks<LoaderResult>, View.OnLongClickListener {
     private static final String TAG = "Line_text_test";
 
     private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
@@ -51,8 +55,8 @@ public class EventTimeFragment extends BasicFragment implements
     private Realm mRealmFaveEvents;
 
     /**
-     * @param mNeededEvents - define displayed events
-     * @param mAllEvents - define all events that will be stored in inner database
+     * mNeededEvents - define displayed events
+     * mAllEvents - define all events that will be stored in inner database
      */
     private List<List<PvPEvent>> mNeededEvents;
     private List<PvPEvent> mAllEvents;
@@ -103,6 +107,10 @@ public class EventTimeFragment extends BasicFragment implements
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
 
         //TODO: OnLongClickListener for events
+        mEventCurrent.setOnLongClickListener(this);
+        mEvent0h.setOnLongClickListener(this);
+        mEvent1h.setOnLongClickListener(this);
+        mEvent2h.setOnLongClickListener(this);
 
         mStopwatchHelper.updateTime(mActivity, mTime0hTextView, mTime1hTextView, mTime2hTextView);
 
@@ -121,9 +129,9 @@ public class EventTimeFragment extends BasicFragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
+        Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.action_show_whole_schedule:
-                Toast.makeText(getActivity(), "Actions show whole schedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_show_favorites:
                 Toast.makeText(getActivity(), "Actions show favorites", Toast.LENGTH_SHORT).show();
@@ -131,6 +139,10 @@ public class EventTimeFragment extends BasicFragment implements
             default:
                 return true;
         }
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_activity_main, fragment)
+                .addToBackStack(null)
+                .commit();
         return true;
     }
 
@@ -356,7 +368,7 @@ public class EventTimeFragment extends BasicFragment implements
 
         ParseTimeFromJSON timeParser = new ParseTimeFromJSON(data.getTimeFromNetwork());
         mDay = timeParser.getParsedDay();
-        mTimeHours = Integer.valueOf(timeParser.getParsedTimeHours());
+        mTimeHours = 20;// Integer.valueOf(timeParser.getParsedTimeHours());
 
         if (mDay.equals(Const.DAY_ERROR)) {
             showNoContent(getView(), getString(R.string.server_error_message));
@@ -373,5 +385,50 @@ public class EventTimeFragment extends BasicFragment implements
 
     }
 
+    /**
+     * Implementation of View.OnLongClickListener interface for event's textViews
+     */
+    @Override
+    public boolean onLongClick(View v) {
+        final List<PvPEvent> events;
+        switch (v.getId()) {
+            case R.id.event_current:
+                events = mNeededEvents.get(0);
+                break;
+            case R.id.event_0h:
+                events = mNeededEvents.get(1);
+                break;
+            case R.id.event_1h:
+                events = mNeededEvents.get(2);
+                break;
+            case R.id.event_2h:
+                events = mNeededEvents.get(3);
+                break;
+            default:
+                events = new ArrayList<>();
+                break;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Add Event To Favorites");
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        for (int i = 0; i < events.size(); i++) {
+            arrayAdapter.add(events.get(i).getEventName());
+        }
+
+        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (events.get(which).getEventName().equals(arrayAdapter.getItem(which))) {
+                    mRealmDatabaseHelper.addEventToDatabase(mRealmFaveEvents, events.get(which));
+                    Toast.makeText(getActivity(), events.get(which).getEventName() +" " +
+                            getString(R.string.event_added_to_db_message), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
+
+        builder.show();
+        return true;
+    }
 }
 

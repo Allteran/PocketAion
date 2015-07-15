@@ -26,7 +26,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_weight="1.0"
+                android:background="@drawable/event_textview_selector"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:text="@string/time_current_text" />
@@ -36,19 +36,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+
                 android:layout_toEndOf="@+id/time_current"
                 android:layout_toRightOf="@+id/time_current"
                 android:padding="10dp"
-                android:text="Event" />
+                android:text="Event" android:clickable="true"/>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/time_event_0h"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/time_event_current"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/time_event_current">
 
             <TextView
                 android:id="@+id/time_0h"
@@ -57,7 +58,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_weight="1.0"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:text="@string/time_current_text" />
@@ -72,13 +72,14 @@
                 android:padding="10dp"
                 android:text="Event" />
         </RelativeLayout>
+
         <RelativeLayout
             android:id="@+id/time_event_1h"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/time_event_0h"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/time_event_0h">
 
             <TextView
                 android:id="@+id/time_1h"
@@ -87,7 +88,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_weight="1.0"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:text="@string/time_current_text" />
@@ -108,9 +108,9 @@
             android:id="@+id/time_event_2h"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/time_event_1h"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/time_event_1h">
 
             <TextView
                 android:id="@+id/time_2h"
@@ -119,7 +119,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_weight="1.0"
                 android:padding="10dp"
                 android:singleLine="true"
                 android:text="@string/time_current_text" />
@@ -146,7 +145,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:indeterminate="true"/>
+            android:indeterminate="true" />
     </RelativeLayout>
 
     <RelativeLayout

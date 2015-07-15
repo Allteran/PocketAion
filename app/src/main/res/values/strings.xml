@@ -38,5 +38,6 @@
     <string name="no_event_name">No event</string>
     <string name="no_network_message">Seems, you have no network access :(</string>
     <string name="server_error_message">Ooops, we have some issue with server. Please, try again later</string>
-    
+    <string name="event_added_to_db_message">were marked as Favorite.</string>
+
 </resources>

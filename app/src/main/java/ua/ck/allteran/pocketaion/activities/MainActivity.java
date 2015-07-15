@@ -161,6 +161,8 @@ public class MainActivity extends BasicActivity {
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setDrawerShadow(R.mipmap.drawer_shadow, GravityCompat.START);
+        mDrawerLayout.openDrawer(GravityCompat.START);
+
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
