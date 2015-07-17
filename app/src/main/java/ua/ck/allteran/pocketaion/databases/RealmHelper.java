@@ -1,5 +1,7 @@
 package ua.ck.allteran.pocketaion.databases;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +60,22 @@ public class RealmHelper {
     }
 
     public void deleteEvent(Realm realm, PvPEvent event) {
-        final List<PvPEvent> results = realm.where(PvPEvent.class).equalTo("id", event.getId())
+        List<PvPEvent> results = realm.where(PvPEvent.class).equalTo("id", event.getId())
                 .findAll();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                results.remove(0);
-            }
-        });
+        realm.beginTransaction();
+        results.remove(0);
+        realm.commitTransaction();
+    }
+
+    public void deleteAllEvents(Realm realm, Context activity, String databaseName) {
+        realm.close();
+        realm.deleteRealmFile(activity, databaseName);
+    }
+
+    public boolean isEventInDatabase(Realm realm, PvPEvent incomingEvent) {
+        List<PvPEvent> result = realm.where(PvPEvent.class)
+                .equalTo("id", incomingEvent.getId())
+                .findAll();
+        return result.size() != 0;
     }
 }

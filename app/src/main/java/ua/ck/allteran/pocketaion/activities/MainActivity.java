@@ -1,26 +1,18 @@
 package ua.ck.allteran.pocketaion.activities;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
+import ua.ck.allteran.pocketaion.adapters.ExpandableNavigationDraverAdapter;
 import ua.ck.allteran.pocketaion.fragments.MainFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
@@ -28,7 +20,6 @@ import ua.ck.allteran.pocketaion.fragments.maps.ShugoNomandMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.TreesMapFragment;
 import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
 import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
-import ua.ck.allteran.pocketaion.fragments.times.RiftsTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
 import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
@@ -68,7 +59,7 @@ public class MainActivity extends BasicActivity {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mCategoryList = (ExpandableListView) findViewById(R.id.left_drawer);
 
-        mCategoryList.setAdapter(new ExpandableAdapter(getBaseContext(), mCategoryName, mSubcategoryName, mSubcategoryCount));
+        mCategoryList.setAdapter(new ExpandableNavigationDraverAdapter(getBaseContext(), mCategoryName, mSubcategoryName, mSubcategoryCount));
         mCategoryList.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView expandableListView, View view, int i, long l) {
@@ -262,104 +253,5 @@ public class MainActivity extends BasicActivity {
         mSubcategoryCount.add(subcategoryMatches.size());
     }
 
-    private class ExpandableAdapter extends BaseExpandableListAdapter {
 
-        private LayoutInflater mLayoutInflater;
-        private ArrayList<NavigationDrawerCategory> mCategoryNameAdapter = new ArrayList<>();
-        private ArrayList<ArrayList<NavigationDrawerSubcategory>> mSubcategoryNameAdapter = new ArrayList<>();
-        private ArrayList<Integer> mSubcategoryCountAdapter = new ArrayList<>();
-        private NavigationDrawerSubcategory mSingleChild = new NavigationDrawerSubcategory();
-        private int mCountAdapter;
-
-        public ExpandableAdapter(Context context, ArrayList<NavigationDrawerCategory> categoryName,
-                                 ArrayList<ArrayList<NavigationDrawerSubcategory>> subcategoryName,
-                                 ArrayList<Integer> subcategoryCount) {
-            mLayoutInflater = LayoutInflater.from(context);
-            mCategoryNameAdapter = categoryName;
-            mSubcategoryNameAdapter = subcategoryName;
-            mSubcategoryCountAdapter = subcategoryCount;
-            mCountAdapter = categoryName.size();
-        }
-
-        @Override
-        public void onGroupCollapsed(int groupPosition) {
-            super.onGroupCollapsed(groupPosition);
-        }
-
-        @Override
-        public void onGroupExpanded(int groupPosition) {
-            super.onGroupExpanded(groupPosition);
-        }
-
-        @Override
-        public int getGroupCount() {
-            return mCountAdapter;
-        }
-
-        @Override
-        public int getChildrenCount(int i) {
-            return (mSubcategoryCountAdapter.get(i));
-        }
-
-        @Override
-        public Object getGroup(int i) {
-            return mCategoryNameAdapter.get(i).getCategoryName();
-        }
-
-        @Override
-        public NavigationDrawerSubcategory getChild(int i, int i1) {
-            ArrayList<NavigationDrawerSubcategory> tempList;
-            tempList = mSubcategoryNameAdapter.get(i);
-            return tempList.get(i1);
-        }
-
-        @Override
-        public long getGroupId(int i) {
-            return i;
-        }
-
-        @Override
-        public long getChildId(int i, int i1) {
-            return i1;
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        @Override
-        public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = mLayoutInflater.inflate(R.layout.expandable_list_category, viewGroup, false);
-            }
-            TextView categoryTitle = (TextView) view.findViewById(R.id.category_title);
-            categoryTitle.setText(getGroup(i).toString());
-
-            return view;
-        }
-
-        @Override
-        public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
-            if (view == null) {
-                view = mLayoutInflater.inflate(R.layout.expandable_list_subcategory, viewGroup, false);
-            }
-
-            mSingleChild = getChild(i, i1);
-
-            TextView subcategoryTitle = (TextView) view.findViewById(R.id.subcategory_title);
-            subcategoryTitle.setText(mSingleChild.getSubcategoryName());
-            return view;
-        }
-
-        @Override
-        public boolean isChildSelectable(int i, int i1) {
-            return true;
-        }
-
-        @Override
-        public boolean areAllItemsEnabled() {
-            return true;
-        }
-    }
 }

@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import java.util.List;
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
+import ua.ck.allteran.pocketaion.adapters.AlertDialogFaveAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.LoaderResult;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
@@ -134,7 +136,7 @@ public class EventTimeFragment extends BasicFragment implements
             case R.id.action_show_whole_schedule:
                 break;
             case R.id.action_show_favorites:
-                Toast.makeText(getActivity(), "Actions show favorites", Toast.LENGTH_SHORT).show();
+                fragment = FavoriteEventsFragment.newInstance(mDay, mTimeHours);
                 break;
             default:
                 return true;
@@ -409,24 +411,9 @@ public class EventTimeFragment extends BasicFragment implements
                 break;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Add Event To Favorites");
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
-        for (int i = 0; i < events.size(); i++) {
-            arrayAdapter.add(events.get(i).getEventName());
-        }
-
-        builder.setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (events.get(which).getEventName().equals(arrayAdapter.getItem(which))) {
-                    mRealmDatabaseHelper.addEventToDatabase(mRealmFaveEvents, events.get(which));
-                    Toast.makeText(getActivity(), events.get(which).getEventName() +" " +
-                            getString(R.string.event_added_to_db_message), Toast.LENGTH_SHORT).show();
-
-                }
-            }
-        });
-
+        builder.setTitle(getString(R.string.add_event_to_fav_title));
+        final AlertDialogFaveAdapter alertDialogAdapter = new AlertDialogFaveAdapter(getActivity(), events);
+        builder.setAdapter(alertDialogAdapter, null);
         builder.show();
         return true;
     }
