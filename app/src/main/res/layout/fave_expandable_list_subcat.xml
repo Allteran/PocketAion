@@ -18,7 +18,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_margin="8dp"
-        android:src="@drawable/delete_from_fave_event" />
+        android:src="@drawable/delete_event_from_fave" />
 
     <ImageButton
         android:id="@+id/set_notification"

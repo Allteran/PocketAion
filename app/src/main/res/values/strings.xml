@@ -4,7 +4,7 @@
     <string name="category_times">Times</string>
     <string name="category_maps">Maps</string>
     <string name="category_stigmas">Stigmas</string>
-    <string name="subcategory_time_siege">Siege Shedule</string>
+    <string name="subcategory_time_siege">Siege Schedule</string>
     <string name="subcategory_time_rifts">Rift\'s Time</string>
     <string name="subcategory_time_trees">Tree\'s Time</string>
     <string name="subcategory_time_sn">Shugo Nomand\'s Time</string>
@@ -36,7 +36,7 @@
     <string name="all_events_deleted_message">All favorite events were deleted</string>
     <string name="event_added_to_db_message">were marked as Favorite.</string>
     <string name="server_error_message">Ooops, we have some issue with server. Please, try again later</string>
-    <string name="no_network_message">Seems, you have no network access :(</string>
+    <string name="no_network_message">Seems, you have no Internet access :(. Warning! Without access to Internet we don\'t guarantee right app\'s work</string>
     <string name="drawer_open">Opened drawer</string>
     <string name="drawer_close">drawer closed</string>
 
@@ -48,4 +48,5 @@
     <!--Other-->
     <string name="time_current_text">Open</string>
     <string name="no_event_name">No event</string>
+    <string name="some_problems_title">Oops, we have a problem!</string>
 </resources>

@@ -3,7 +3,6 @@ package ua.ck.allteran.pocketaion.fragments.times;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,12 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
-import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.FaveEventsExpAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
@@ -35,6 +36,8 @@ public class FavoriteEventsFragment extends BasicFragment {
     private Realm mRealmFaveEvents;
     private AppCompatActivity mActivity;
     private RealmHelper mDatabaseHelper;
+    private FaveEventsExpAdapter mFaveEventsAdapter;
+    private List<List<PvPEvent>> mSortedEvents;
 
     public static FavoriteEventsFragment newInstance(String day, int hour) {
         FavoriteEventsFragment fragment = new FavoriteEventsFragment();
@@ -69,7 +72,7 @@ public class FavoriteEventsFragment extends BasicFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mRealmFaveEvents == null ) {
+        if (mRealmFaveEvents == null) {
             mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
         }
     }
@@ -81,43 +84,64 @@ public class FavoriteEventsFragment extends BasicFragment {
 
         mDatabaseHelper = new RealmHelper();
         List<PvPEvent> eventsFromDatabase = mDatabaseHelper.getAllEvents(mRealmFaveEvents);
-        List<List<PvPEvent>> sortedEvents = new ArrayList<>();
+        mSortedEvents = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
-            sortedEvents.add(new ArrayList<PvPEvent>());
+            mSortedEvents.add(new ArrayList<PvPEvent>());
         }
         for (int i = 0; i < eventsFromDatabase.size(); i++) {
             for (int j = 0; j < eventsFromDatabase.get(i).getTime().size(); j++) {
                 switch (eventsFromDatabase.get(i).getTime().get(j).getDay()) {
                     case Const.DAY_SUNDAY:
-                        sortedEvents.get(0).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(0).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_MONDAY:
-                        sortedEvents.get(1).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(1).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_TUESDAY:
-                        sortedEvents.get(2).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(2).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_WEDNESDAY:
-                        sortedEvents.get(3).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(3).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_THURSDAY:
-                        sortedEvents.get(4).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(4).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_FRIDAY:
-                        sortedEvents.get(5).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(5).add(eventsFromDatabase.get(i));
                         break;
                     case Const.DAY_SATURDAY:
-                        sortedEvents.get(6).add(eventsFromDatabase.get(i));
+                        mSortedEvents.get(6).add(eventsFromDatabase.get(i));
                         break;
                     default:
                         break;
                 }
             }
         }
+        //To delete duplicates I used HasSet which doesn't allow duplicates
+        //Using LinkedHashSet I'm saving order that was at the beginning
+        for (int i = 0; i < mSortedEvents.size(); i++) {
+            LinkedHashSet<PvPEvent> bufferSet = new LinkedHashSet<>(mSortedEvents.get(i));
+            mSortedEvents.get(i).clear();
+            mSortedEvents.get(i).addAll(bufferSet);
+        }
         ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.fave_events_exlist);
-        FaveEventsExpAdapter adapter = new FaveEventsExpAdapter(mActivity, sortedEvents);
+        mFaveEventsAdapter = new FaveEventsExpAdapter(mActivity, mSortedEvents);
 
-        expandableListView.setAdapter(adapter);
+        expandableListView.setAdapter(mFaveEventsAdapter);
+
+        String[] daysLine = {Const.DAY_SUNDAY, Const.DAY_MONDAY, Const.DAY_TUESDAY, Const.DAY_WEDNESDAY,
+                Const.DAY_THURSDAY, Const.DAY_FRIDAY, Const.DAY_SATURDAY};
+        String currentDay = "";
+        if (getArguments() != null) {
+            currentDay = getArguments().getString(Const.ARG_DAY);
+            if (currentDay != null) {
+                for (int i = 0; i < daysLine.length; i++) {
+                    if (currentDay.equals(daysLine[i])) {
+                        expandableListView.expandGroup(i, true);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -141,6 +165,8 @@ public class FavoriteEventsFragment extends BasicFragment {
                                 Toast.makeText(mActivity, R.string.all_events_deleted_message, Toast.LENGTH_SHORT).show();
                                 mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
                                 dialog.dismiss();
+                                mSortedEvents.clear();
+                                mFaveEventsAdapter.notifyDataSetChanged();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

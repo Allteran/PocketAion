@@ -10,8 +10,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
-import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
-import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerCategory;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerSubcategory;
 
 public class ExpandableNavigationDraverAdapter extends BaseExpandableListAdapter {
 

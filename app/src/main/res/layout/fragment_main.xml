@@ -6,7 +6,7 @@
               android:weightSum="1">
     <Button
         android:id="@+id/delete_realm"
-        android:text="Delete Realm"
+        android:text="Reset preference boolean"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </LinearLayout>

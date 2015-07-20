@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
  */
 public class PreferenceHelper {
     private static final String IS_FIRST_LAUNCH = "is_first_launch";
+    private static final String IS_WARNING_SHOWED = "is_waring_showed";
     private static PreferenceHelper mInstance;
 
     private SharedPreferences mSharedPreferences;
@@ -18,21 +19,29 @@ public class PreferenceHelper {
     }
 
     public static PreferenceHelper getInstance(Context context) {
-        if(mInstance == null) {
+        if (mInstance == null) {
             mInstance = new PreferenceHelper(context);
         }
         return mInstance;
     }
 
-    public boolean isFirstLaunch() {
+    public boolean isFirstAppLaunch() {
         return mSharedPreferences.getBoolean(IS_FIRST_LAUNCH, true);
     }
 
-    public void launchFirstTime(boolean isFirstLaunch) {
+    public void launchAppFirstTime(boolean isFirstLaunch) {
         mSharedPreferences.edit()
                 .putBoolean(IS_FIRST_LAUNCH, isFirstLaunch)
                 .apply();
     }
 
+    public boolean isWarningShowed() {
+        return mSharedPreferences.getBoolean(IS_WARNING_SHOWED, false);
+    }
 
+    public void showWarning(boolean isWarningShowed) {
+        mSharedPreferences.edit()
+                .putBoolean(IS_WARNING_SHOWED, isWarningShowed)
+                .apply();
+    }
 }

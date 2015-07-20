@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -22,8 +23,9 @@ import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
 import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
-import ua.ck.allteran.pocketaion.utilities.NavigationDrawerCategory;
-import ua.ck.allteran.pocketaion.utilities.NavigationDrawerSubcategory;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerCategory;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerSubcategory;
+import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 
 import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_MAPS;
 import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_STIGMAS;
@@ -174,6 +176,18 @@ public class MainActivity extends BasicActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onDetachedFromWindow() {
+        //TODO: check if it's right to do such operation in this method and maybe replace 'onDetachedFromWindow' with 'onDestroy'
+        super.onDetachedFromWindow();
+        Log.i(TAG, "onDetachedFromWindow");
+        PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(this);
+        preferenceHelper.showWarning(false);
+        Log.i(TAG, String.valueOf(preferenceHelper.isWarningShowed()));
+    }
+
+
 
     private void setDrawerElementsName() {
         mCategoryName.clear();

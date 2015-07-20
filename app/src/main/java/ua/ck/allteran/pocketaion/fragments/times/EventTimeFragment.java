@@ -17,10 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.AlertDialogFaveAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
-import ua.ck.allteran.pocketaion.entites.LoaderResult;
+import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
@@ -43,8 +40,8 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment implements
-        LoaderManager.LoaderCallbacks<LoaderResult>, View.OnLongClickListener {
-    private static final String TAG = "Line_text_test";
+        LoaderManager.LoaderCallbacks<PvPEventsLoaderResult>, View.OnLongClickListener {
+    private static final String TAG = "EventTImeFragment";
 
     private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
@@ -74,6 +71,14 @@ public class EventTimeFragment extends BasicFragment implements
         mPreferenceHelper = PreferenceHelper.getInstance(mActivity);
         mStopwatchHelper = new StopwatchHelper();
         mRealmDatabaseHelper = new RealmHelper();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mRealmFaveEvents != null) {
+            mRealmFaveEvents.close();
+        }
     }
 
     @Override
@@ -108,7 +113,6 @@ public class EventTimeFragment extends BasicFragment implements
         mEvent1h = (TextView) view.findViewById(R.id.event_1h);
         mEvent2h = (TextView) view.findViewById(R.id.event_2h);
 
-        //TODO: OnLongClickListener for events
         mEventCurrent.setOnLongClickListener(this);
         mEvent0h.setOnLongClickListener(this);
         mEvent1h.setOnLongClickListener(this);
@@ -348,16 +352,26 @@ public class EventTimeFragment extends BasicFragment implements
     }
 
     public void startPvPLoader() {
-        if (isOnline()) {
-            getLoaderManager().getLoader(Const.PVP_EVENT_LOADER_ID).forceLoad();
-        } else {
-            showNoContent(getView(), getString(R.string.no_network_message));
+        Log.i(TAG, String.valueOf(mPreferenceHelper.isWarningShowed()));
+        if (!isOnline() && !mPreferenceHelper.isWarningShowed()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.some_problems_title)
+                    .setMessage(R.string.no_network_message)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            builder.show();
+            mPreferenceHelper.showWarning(true);
         }
+        getLoaderManager().getLoader(Const.PVP_EVENT_LOADER_ID).forceLoad();
     }
 
     @Override
-    public android.support.v4.content.Loader<LoaderResult> onCreateLoader(int id, Bundle args) {
-        android.support.v4.content.Loader<LoaderResult> loader = null;
+    public android.support.v4.content.Loader<PvPEventsLoaderResult> onCreateLoader(int id, Bundle args) {
+        android.support.v4.content.Loader<PvPEventsLoaderResult> loader = null;
         if (id == Const.PVP_EVENT_LOADER_ID) {
             loader = new PvPEventsLoader(mActivity, args);
         }
@@ -365,7 +379,7 @@ public class EventTimeFragment extends BasicFragment implements
     }
 
     @Override
-    public void onLoadFinished(android.support.v4.content.Loader<LoaderResult> loader, LoaderResult data) {
+    public void onLoadFinished(android.support.v4.content.Loader<PvPEventsLoaderResult> loader, PvPEventsLoaderResult data) {
         mAllEvents = data.getAllEvents();
 
         ParseTimeFromJSON timeParser = new ParseTimeFromJSON(data.getTimeFromNetwork());
@@ -383,7 +397,7 @@ public class EventTimeFragment extends BasicFragment implements
     }
 
     @Override
-    public void onLoaderReset(android.support.v4.content.Loader<LoaderResult> loader) {
+    public void onLoaderReset(android.support.v4.content.Loader<PvPEventsLoaderResult> loader) {
 
     }
 

@@ -1,6 +1,5 @@
 package ua.ck.allteran.pocketaion.tasks;
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,11 +8,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -21,7 +16,7 @@ import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
-import ua.ck.allteran.pocketaion.entites.LoaderResult;
+import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 import ua.ck.allteran.pocketaion.utilities.Const;
 
@@ -30,7 +25,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  * Current loader will download string with time from network and add to database all events, if
  * it's first launch of application
  */
-public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<LoaderResult> {
+public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<PvPEventsLoaderResult> {
 
     public static final String URL_EXTRA = "link_for_time";
     private static final String TAG = "TimeZone_TAG: ";
@@ -49,14 +44,14 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
     }
 
     @Override
-    public LoaderResult loadInBackground() {
-        LoaderResult loaderResult = new LoaderResult();
+    public PvPEventsLoaderResult loadInBackground() {
+        PvPEventsLoaderResult loaderResult = new PvPEventsLoaderResult();
         Realm realm = Realm.getInstance(mContext, mContext.getString(R.string.default_database_name));
         PreferenceHelper pHelper = PreferenceHelper.getInstance(mContext);
-        if (pHelper.isFirstLaunch()) {
+        if (pHelper.isFirstAppLaunch()) {
             CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
             dbHelper.createEventDatabase(realm);
-            pHelper.launchFirstTime(false);
+            pHelper.launchAppFirstTime(false);
         }
 
         loaderResult.setAllEvents(new RealmHelper().getAllEvents(realm));

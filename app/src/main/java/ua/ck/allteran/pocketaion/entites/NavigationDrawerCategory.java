@@ -1,4 +1,4 @@
-package ua.ck.allteran.pocketaion.utilities;
+package ua.ck.allteran.pocketaion.entites;
 
 /**
  * Created by Dante on 5/24/2015.

@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Allteran on 7/7/2015.
  */
-public class LoaderResult {
+public class PvPEventsLoaderResult {
     private List<PvPEvent> mAllEvents;
     private String mTimeFromNetwork;
 

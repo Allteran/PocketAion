@@ -41,9 +41,7 @@ public class MainFragment extends BasicFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Realm.deleteRealmFile(mActivity,getString(R.string.default_database_name));
-                Toast.makeText(mActivity, "Deleted!", Toast.LENGTH_SHORT).show();
-                mPreferenceHelper.launchFirstTime(true);
+                mPreferenceHelper.showWarning(false);
             }
         });
     }
