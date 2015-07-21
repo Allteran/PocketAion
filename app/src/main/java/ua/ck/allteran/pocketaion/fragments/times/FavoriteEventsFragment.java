@@ -14,15 +14,14 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
-import ua.ck.allteran.pocketaion.adapters.FaveEventsExpAdapter;
+import ua.ck.allteran.pocketaion.activities.MainActivity;
+import ua.ck.allteran.pocketaion.adapters.DatabaseEventsExpAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
@@ -36,7 +35,7 @@ public class FavoriteEventsFragment extends BasicFragment {
     private Realm mRealmFaveEvents;
     private AppCompatActivity mActivity;
     private RealmHelper mDatabaseHelper;
-    private FaveEventsExpAdapter mFaveEventsAdapter;
+    private DatabaseEventsExpAdapter mFaveEventsAdapter;
     private List<List<PvPEvent>> mSortedEvents;
 
     public static FavoriteEventsFragment newInstance(String day, int hour) {
@@ -65,14 +64,14 @@ public class FavoriteEventsFragment extends BasicFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mActivity = (AppCompatActivity) getActivity();
+        mActivity = (MainActivity) getActivity();
         mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (mRealmFaveEvents == null) {
+        if (mRealmFaveEvents != null) {
             mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
         }
     }
@@ -82,6 +81,10 @@ public class FavoriteEventsFragment extends BasicFragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
+        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity.getSupportActionBar().setTitle(R.string.fave_events_title);
         mDatabaseHelper = new RealmHelper();
         List<PvPEvent> eventsFromDatabase = mDatabaseHelper.getAllEvents(mRealmFaveEvents);
         mSortedEvents = new ArrayList<>();
@@ -125,7 +128,7 @@ public class FavoriteEventsFragment extends BasicFragment {
             mSortedEvents.get(i).addAll(bufferSet);
         }
         ExpandableListView expandableListView = (ExpandableListView) view.findViewById(R.id.fave_events_exlist);
-        mFaveEventsAdapter = new FaveEventsExpAdapter(mActivity, mSortedEvents);
+        mFaveEventsAdapter = new DatabaseEventsExpAdapter(mActivity, mSortedEvents, true);
 
         expandableListView.setAdapter(mFaveEventsAdapter);
 
@@ -148,6 +151,15 @@ public class FavoriteEventsFragment extends BasicFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fave_events, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem actionDeleteAllFaveEvents = menu.findItem(R.id.action_delete_all_fave_events);
+        if (mFaveEventsAdapter.isEmpty()) {
+            actionDeleteAllFaveEvents.setVisible(false);
+        }
     }
 
     @Override

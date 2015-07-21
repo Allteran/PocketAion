@@ -16,6 +16,7 @@
 
     <string name="delete_all_fave_events_title">Delete All Favorite Events</string>
     <string name="add_event_to_fav_title">Add Event To Favorites</string>
+    <string name="some_problems_title">Oops, we have a problem!</string>
 
     <!--Button's name and labels-->
     <string name="action_settings">Settings</string>
@@ -40,7 +41,6 @@
     <string name="drawer_open">Opened drawer</string>
     <string name="drawer_close">drawer closed</string>
 
-
     <!--Database's names and utils-->
     <string name="default_database_name">shedule.db</string>
     <string name="fave_events_database_name">favorites.realm</string>
@@ -48,5 +48,7 @@
     <!--Other-->
     <string name="time_current_text">Open</string>
     <string name="no_event_name">No event</string>
-    <string name="some_problems_title">Oops, we have a problem!</string>
+    <string name="fave_events_title">Favorite Events</string>
+    <string name="whole_schedule_title">Whole Schedule</string>
+
 </resources>

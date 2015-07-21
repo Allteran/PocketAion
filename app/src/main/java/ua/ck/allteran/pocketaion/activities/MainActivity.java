@@ -187,8 +187,6 @@ public class MainActivity extends BasicActivity {
         Log.i(TAG, String.valueOf(preferenceHelper.isWarningShowed()));
     }
 
-
-
     private void setDrawerElementsName() {
         mCategoryName.clear();
 

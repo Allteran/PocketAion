@@ -100,6 +100,11 @@ public class EventTimeFragment extends BasicFragment implements
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
+        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mActivity.getSupportActionBar().setTitle(R.string.subcategory_time_siege);
+
         showLoadingBar(getView());
         mActivity.setTitle(R.string.subcategory_time_siege);
         mAllEvents = null;
@@ -135,9 +140,10 @@ public class EventTimeFragment extends BasicFragment implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
-        Fragment fragment = null;
+        Fragment fragment;
         switch (item.getItemId()) {
             case R.id.action_show_whole_schedule:
+                fragment = WholeScheduleFragment.newInstance(mDay, mTimeHours);
                 break;
             case R.id.action_show_favorites:
                 fragment = FavoriteEventsFragment.newInstance(mDay, mTimeHours);
@@ -383,7 +389,7 @@ public class EventTimeFragment extends BasicFragment implements
         mAllEvents = data.getAllEvents();
 
         ParseTimeFromJSON timeParser = new ParseTimeFromJSON(data.getTimeFromNetwork());
-        mDay = timeParser.getParsedDay();
+        mDay = Const.DAY_MONDAY; //timeParser.getParsedDay();
         mTimeHours = 20;// Integer.valueOf(timeParser.getParsedTimeHours());
 
         if (mDay.equals(Const.DAY_ERROR)) {
