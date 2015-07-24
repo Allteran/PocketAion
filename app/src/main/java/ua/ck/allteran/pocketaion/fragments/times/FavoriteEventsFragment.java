@@ -32,7 +32,6 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  */
 public class FavoriteEventsFragment extends BasicFragment {
 
-    private Realm mRealmFaveEvents;
     private AppCompatActivity mActivity;
     private RealmHelper mDatabaseHelper;
     private DatabaseEventsExpAdapter mFaveEventsAdapter;
@@ -54,27 +53,11 @@ public class FavoriteEventsFragment extends BasicFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mRealmFaveEvents != null) {
-            mRealmFaveEvents.close();
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mRealmFaveEvents != null) {
-            mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
-        }
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -86,7 +69,8 @@ public class FavoriteEventsFragment extends BasicFragment {
 
         mActivity.getSupportActionBar().setTitle(R.string.fave_events_title);
         mDatabaseHelper = new RealmHelper();
-        List<PvPEvent> eventsFromDatabase = mDatabaseHelper.getAllEvents(mRealmFaveEvents);
+        List<PvPEvent> eventsFromDatabase = mDatabaseHelper.getAllEvents(mActivity,
+                getString(R.string.fave_events_database_name));
         mSortedEvents = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             mSortedEvents.add(new ArrayList<PvPEvent>());
@@ -172,10 +156,8 @@ public class FavoriteEventsFragment extends BasicFragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                mRealmFaveEvents.close();
-                                mDatabaseHelper.deleteAllEvents(mRealmFaveEvents, mActivity, getString(R.string.fave_events_database_name));
+                                mDatabaseHelper.deleteAllEvents(mActivity, getString(R.string.fave_events_database_name));
                                 Toast.makeText(mActivity, R.string.all_events_deleted_message, Toast.LENGTH_SHORT).show();
-                                mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
                                 dialog.dismiss();
                                 mSortedEvents.clear();
                                 mFaveEventsAdapter.notifyDataSetChanged();

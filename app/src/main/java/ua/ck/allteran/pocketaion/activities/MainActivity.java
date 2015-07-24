@@ -178,10 +178,10 @@ public class MainActivity extends BasicActivity {
     }
 
     @Override
-    public void onDetachedFromWindow() {
+    public void onDestroy() {
         //TODO: check if it's right to do such operation in this method and maybe replace 'onDetachedFromWindow' with 'onDestroy'
-        super.onDetachedFromWindow();
-        Log.i(TAG, "onDetachedFromWindow");
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
         PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(this);
         preferenceHelper.showWarning(false);
         Log.i(TAG, String.valueOf(preferenceHelper.isWarningShowed()));

@@ -9,16 +9,6 @@ public class EventsTime extends RealmObject {
     private int beginTime, endTime;
     private String day;
 
-    public EventsTime() {
-
-    }
-
-    public EventsTime (int beginTime, int endTime, String day) {
-        this.beginTime = beginTime;
-        this.endTime = endTime;
-        this.day = day;
-    }
-
     public int getBeginTime() {
         return beginTime;
     }

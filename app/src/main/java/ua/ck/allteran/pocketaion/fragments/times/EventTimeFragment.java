@@ -22,7 +22,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.AlertDialogFaveAdapter;
@@ -49,9 +48,6 @@ public class EventTimeFragment extends BasicFragment implements
     private AppCompatActivity mActivity;
     private PreferenceHelper mPreferenceHelper;
     private StopwatchHelper mStopwatchHelper;
-    private RealmHelper mRealmDatabaseHelper;
-
-    private Realm mRealmFaveEvents;
 
     /**
      * mNeededEvents - define displayed events
@@ -67,26 +63,8 @@ public class EventTimeFragment extends BasicFragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        mRealmFaveEvents = Realm.getInstance(mActivity, getString(R.string.fave_events_database_name));
         mPreferenceHelper = PreferenceHelper.getInstance(mActivity);
         mStopwatchHelper = new StopwatchHelper();
-        mRealmDatabaseHelper = new RealmHelper();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mRealmFaveEvents != null) {
-            mRealmFaveEvents.close();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mRealmFaveEvents != null) {
-            mRealmFaveEvents.close();
-        }
     }
 
     @Nullable
@@ -106,7 +84,6 @@ public class EventTimeFragment extends BasicFragment implements
         mActivity.getSupportActionBar().setTitle(R.string.subcategory_time_siege);
 
         showLoadingBar(getView());
-        mActivity.setTitle(R.string.subcategory_time_siege);
         mAllEvents = null;
 
         mTime0hTextView = (TextView) view.findViewById(R.id.time_0h);
@@ -432,7 +409,7 @@ public class EventTimeFragment extends BasicFragment implements
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.add_event_to_fav_title));
-        final AlertDialogFaveAdapter alertDialogAdapter = new AlertDialogFaveAdapter(getActivity(), events);
+        AlertDialogFaveAdapter alertDialogAdapter = new AlertDialogFaveAdapter(mActivity, events);
         builder.setAdapter(alertDialogAdapter, null);
         builder.show();
         return true;

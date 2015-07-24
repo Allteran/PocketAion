@@ -46,15 +46,14 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
     @Override
     public PvPEventsLoaderResult loadInBackground() {
         PvPEventsLoaderResult loaderResult = new PvPEventsLoaderResult();
-        Realm realm = Realm.getInstance(mContext, mContext.getString(R.string.default_database_name));
         PreferenceHelper pHelper = PreferenceHelper.getInstance(mContext);
         if (pHelper.isFirstAppLaunch()) {
             CreateDatabaseHelper dbHelper = new CreateDatabaseHelper();
-            dbHelper.createEventDatabase(realm);
+            dbHelper.createEventDatabase(mContext, mContext.getString(R.string.default_database_name));
             pHelper.launchAppFirstTime(false);
         }
 
-        loaderResult.setAllEvents(new RealmHelper().getAllEvents(realm));
+        loaderResult.setAllEvents(new RealmHelper().getAllEvents(mContext, mContext.getString(R.string.default_database_name)));
 
         OkHttpClient client = new OkHttpClient();
         String timeFromNetwork = "";
@@ -70,7 +69,6 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
             String nativeTimeZone = calendar.getTimeZone().getID();
 
             calendar.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-            //TODO: check, if there difference in days depends on current time (there shouldn't be like it's 1 am CDT, day is Sun, but displaying Sat (cuz Eu/Kiev has other time)
 
             timeFromNetwork = "{\"fulldate\":\"" + getDayInString(calendar.get(Calendar.DAY_OF_WEEK)) + "\",\"hours\":" +
                     calendar.get(Calendar.HOUR_OF_DAY) + ",\"minutes\":" + calendar.get(Calendar.MINUTE) + ",\"seconds\":" + calendar.get(Calendar.SECOND) + "}";
@@ -79,7 +77,6 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
         }
 
         loaderResult.setTimeFromNetwork(timeFromNetwork);
-        realm.close();
         return loaderResult;
     }
 

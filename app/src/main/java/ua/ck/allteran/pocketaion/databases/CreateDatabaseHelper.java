@@ -1,5 +1,7 @@
 package ua.ck.allteran.pocketaion.databases;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -16,7 +18,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
  */
 public class CreateDatabaseHelper {
 
-    public void createEventDatabase(Realm realm) {
+    public void createEventDatabase(Context context, String fileName) {
         ArrayList<PvPEvent> events = new ArrayList<>();
         PvPEvent event;
         RealmList<EventsTime> times;
@@ -386,7 +388,7 @@ public class CreateDatabaseHelper {
          */
         RealmHelper realmHelper = new RealmHelper();
         for (PvPEvent e : events) {
-            realmHelper.addEventToDatabase(realm, e);
+            realmHelper.addEventToDatabase(context, fileName, e);
         }
 
 

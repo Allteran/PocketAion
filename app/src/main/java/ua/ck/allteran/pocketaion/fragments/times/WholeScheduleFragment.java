@@ -29,7 +29,6 @@ import ua.ck.allteran.pocketaion.utilities.Const;
 public class WholeScheduleFragment extends BasicFragment {
 
     private AppCompatActivity mActivity;
-    private Realm mRealmAllEvents;
 
     public static WholeScheduleFragment newInstance(String day, int hour) {
         WholeScheduleFragment fragment = new WholeScheduleFragment();
@@ -44,7 +43,6 @@ public class WholeScheduleFragment extends BasicFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mActivity = (MainActivity) getActivity();
-        mRealmAllEvents = Realm.getInstance(mActivity, getString(R.string.default_database_name));
     }
 
     @Nullable
@@ -63,7 +61,7 @@ public class WholeScheduleFragment extends BasicFragment {
 
         mActivity.getSupportActionBar().setTitle(R.string.whole_schedule_title);
         RealmHelper databaseHelper = new RealmHelper();
-        List<PvPEvent> eventsFromDatabase = databaseHelper.getAllEvents(mRealmAllEvents);
+        List<PvPEvent> eventsFromDatabase = databaseHelper.getAllEvents(mActivity,getString(R.string.default_database_name));
         List<List<PvPEvent>> sortedEvents = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             sortedEvents.add(new ArrayList<PvPEvent>());

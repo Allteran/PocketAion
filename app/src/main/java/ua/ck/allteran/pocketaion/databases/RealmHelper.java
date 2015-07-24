@@ -15,7 +15,8 @@ import ua.ck.allteran.pocketaion.entites.PvPEvent;
  */
 public class RealmHelper {
 
-    public void addEventToDatabase(Realm realm, PvPEvent event) {
+    public void addEventToDatabase(Context context, String databaseFileName, PvPEvent event) {
+        Realm realm = Realm.getInstance(context,databaseFileName);
         realm.beginTransaction();
 
         RealmList<EventsTime> eventsTimes = new RealmList<>();
@@ -33,11 +34,14 @@ public class RealmHelper {
         realmEvent.setEventName(event.getEventName());
 
         realm.commitTransaction();
+        realm.close();
     }
 
-    public List<PvPEvent> getAllEvents(Realm realm) {
+    public List<PvPEvent> getAllEvents(Context context, String databaseFileName) {
+        Realm realm = Realm.getInstance(context, databaseFileName);
+
         List<PvPEvent> eventsFromDatabase = realm.where(PvPEvent.class).findAll();
-        ArrayList<PvPEvent> pvpEvent = new ArrayList<>();
+        ArrayList<PvPEvent> pvpEvents = new ArrayList<>();
         for (int i = 0; i < eventsFromDatabase.size(); i++) {
             PvPEvent event = new PvPEvent();
             event.setId(eventsFromDatabase.get(i).getId());
@@ -54,28 +58,37 @@ public class RealmHelper {
             }
 
             event.setTime(eventsTimes);
-            pvpEvent.add(event);
+            pvpEvents.add(event);
         }
-        return pvpEvent;
+
+        realm.close();
+        return pvpEvents;
     }
 
-    public void deleteEvent(Realm realm, PvPEvent event) {
+    public void deleteEvent(Context context, String databaseFileName, PvPEvent event) {
+        Realm realm = Realm.getInstance(context, databaseFileName);
+
         List<PvPEvent> results = realm.where(PvPEvent.class).equalTo("id", event.getId())
                 .findAll();
         realm.beginTransaction();
         results.remove(0);
         realm.commitTransaction();
-    }
 
-    public void deleteAllEvents(Realm realm, Context activity, String databaseName) {
         realm.close();
-        realm.deleteRealmFile(activity, databaseName);
     }
 
-    public boolean isEventInDatabase(Realm realm, PvPEvent incomingEvent) {
-        List<PvPEvent> result = realm.where(PvPEvent.class)
+    public void deleteAllEvents(Context activity, String databaseName) {
+        Realm.deleteRealmFile(activity, databaseName);
+    }
+
+    public boolean isEventInDatabase(Context context, String databaseFileName, PvPEvent incomingEvent) {
+        Realm realm = Realm.getInstance(context, databaseFileName);
+
+        List<PvPEvent> searchResult = realm.where(PvPEvent.class)
                 .equalTo("id", incomingEvent.getId())
                 .findAll();
-        return result.size() != 0;
+        boolean isEventInDatabase = searchResult.size() != 0;
+        realm.close();
+        return isEventInDatabase;
     }
 }

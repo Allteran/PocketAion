@@ -4,32 +4,25 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
 
-/**
- * Created by Allteran on 7/17/2015.
- */
 public class AlertDialogFaveAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
     private List<PvPEvent> mEvents;
-    private Realm mRealmFaveEvents;
+    private Context mContext;
 
     public AlertDialogFaveAdapter(Context context, List<PvPEvent> events) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mEvents = events;
-        mRealmFaveEvents = Realm.getInstance(context, context.getString(R.string.fave_events_database_name));
+        mContext = context;
     }
 
     @Override
@@ -60,18 +53,23 @@ public class AlertDialogFaveAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.mCurrentEventName.setText(mEvents.get(position).getEventName());
+
         final RealmHelper databaseHelper = new RealmHelper();
-        viewHolder.mIsEventFave.setChecked(databaseHelper.isEventInDatabase(mRealmFaveEvents, mEvents.get(position)));
+
+        viewHolder.mIsEventFave.setChecked(databaseHelper.isEventInDatabase(mContext, mContext
+                .getString(R.string.fave_events_database_name), mEvents.get(position)));
         viewHolder.mIsEventFave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean checked = !((CheckBox) v).isChecked();
                 if (checked) {
-                    databaseHelper.deleteEvent(mRealmFaveEvents, mEvents.get(position));
+                    databaseHelper.deleteEvent(mContext, mContext.getString(R.string.fave_events_database_name),
+                            mEvents.get(position));
                 } else {
-                    databaseHelper.addEventToDatabase(mRealmFaveEvents, mEvents.get(position));
+                    databaseHelper.addEventToDatabase(mContext, mContext.getString(R.string.fave_events_database_name),
+                            mEvents.get(position));
                 }
-                ((CheckBox)v).setChecked(!checked);
+                ((CheckBox) v).setChecked(!checked);
                 notifyDataSetChanged();
             }
         });
