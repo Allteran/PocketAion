@@ -1,16 +1,12 @@
 package ua.ck.allteran.pocketaion.fragments.times;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,22 +21,21 @@ import java.util.List;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.AlertDialogFaveAdapter;
-import ua.ck.allteran.pocketaion.databases.RealmHelper;
-import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
+import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
 import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 import ua.ck.allteran.pocketaion.helpers.StopwatchHelper;
 import ua.ck.allteran.pocketaion.tasks.ParseTimeFromJSON;
 import ua.ck.allteran.pocketaion.tasks.PvPEventsLoader;
 import ua.ck.allteran.pocketaion.utilities.Const;
+import ua.ck.allteran.pocketaion.utilities.Utils;
 
 /**
  * Created by Alteran on 5/22/2015.
  */
 public class EventTimeFragment extends BasicFragment implements
         LoaderManager.LoaderCallbacks<PvPEventsLoaderResult>, View.OnLongClickListener {
-    private static final String TAG = "EventTImeFragment";
 
     private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
@@ -139,7 +134,7 @@ public class EventTimeFragment extends BasicFragment implements
         List<PvPEvent> innerList = new ArrayList<>();
         innerList.add(new PvPEvent(Const.NO_EVENT_ID, getString(R.string.no_event_name)));
         for (int i = 0; i < events.size(); i++) {
-            if (events.get(i).size() == 10) {
+            if (events.get(i).size() == Const.MAX_EVENT_IN_HOUR) {
                 events.remove(i);
                 events.add(i, innerList);
             }
@@ -328,15 +323,8 @@ public class EventTimeFragment extends BasicFragment implements
         return tempArray;
     }
 
-    public boolean isOnline() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) mActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
-    }
-
     public void startPvPLoader() {
-        Log.i(TAG, String.valueOf(mPreferenceHelper.isWarningShowed()));
-        if (!isOnline() && !mPreferenceHelper.isWarningShowed()) {
+        if (!Utils.isOnline(mActivity) && !mPreferenceHelper.isWarningShowed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.some_problems_title)
                     .setMessage(R.string.no_network_message)

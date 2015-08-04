@@ -21,6 +21,8 @@ public class Const {
     public static final String ARG_DAY = "arg_day";
     public static final String ARG_HOUR = "arg_hour";
 
+    public static final int MAX_EVENT_IN_HOUR = 10;
+
     public static class Navigation {
         //category's constants
         public static final int CAT_TIMES = 0;

@@ -36,7 +36,7 @@
     <string name="delete_all_fave_events_message">Are you sure you want to delete all favorite events?</string>
     <string name="all_events_deleted_message">All favorite events were deleted</string>
     <string name="event_added_to_db_message">were marked as Favorite.</string>
-    <string name="server_error_message">Ooops, we have some issue with server. Please, try again later</string>
+    <string name="server_error_message">Ooops, we have some issue with app engine. To remove this issue try to restart app.</string>
     <string name="no_network_message">Seems, you have no Internet access :(. Warning! Without access to Internet we don\'t guarantee right app\'s work</string>
     <string name="drawer_open">Opened drawer</string>
     <string name="drawer_close">drawer closed</string>
@@ -50,5 +50,6 @@
     <string name="no_event_name">No event</string>
     <string name="fave_events_title">Favorite Events</string>
     <string name="whole_schedule_title">Whole Schedule</string>
+    <string name="no_fave_events_message">Seems, you have no any favorite event.</string>
 
 </resources>

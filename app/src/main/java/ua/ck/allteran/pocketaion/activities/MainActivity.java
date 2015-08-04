@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -14,6 +13,8 @@ import java.util.ArrayList;
 
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.adapters.ExpandableNavigationDraverAdapter;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerCategory;
+import ua.ck.allteran.pocketaion.entites.NavigationDrawerSubcategory;
 import ua.ck.allteran.pocketaion.fragments.MainFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.BMShugoMapFragment;
 import ua.ck.allteran.pocketaion.fragments.maps.RiftsMapFragment;
@@ -23,8 +24,6 @@ import ua.ck.allteran.pocketaion.fragments.stigmas.CalculateStigmasFragment;
 import ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.ShugoNomandTimeFragment;
 import ua.ck.allteran.pocketaion.fragments.times.TreesTimeFragment;
-import ua.ck.allteran.pocketaion.entites.NavigationDrawerCategory;
-import ua.ck.allteran.pocketaion.entites.NavigationDrawerSubcategory;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 
 import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.CAT_MAPS;
@@ -42,7 +41,6 @@ import static ua.ck.allteran.pocketaion.utilities.Const.Navigation.SUBCAT_TIMES_
 
 
 public class MainActivity extends BasicActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private ExpandableListView mCategoryList;
@@ -179,12 +177,9 @@ public class MainActivity extends BasicActivity {
 
     @Override
     public void onDestroy() {
-        //TODO: check if it's right to do such operation in this method and maybe replace 'onDetachedFromWindow' with 'onDestroy'
         super.onDestroy();
-        Log.i(TAG, "onDestroy");
         PreferenceHelper preferenceHelper = PreferenceHelper.getInstance(this);
         preferenceHelper.showWarning(false);
-        Log.i(TAG, String.valueOf(preferenceHelper.isWarningShowed()));
     }
 
     private void setDrawerElementsName() {

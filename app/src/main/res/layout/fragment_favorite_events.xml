@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-    <ExpandableListView
-        android:id="@+id/fave_events_exlist"
+    <RelativeLayout
+        android:id="@+id/content_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:indicatorLeft="250dp"
-        android:indicatorRight="300dp" />
+        android:layout_height="match_parent">
 
+        <ExpandableListView
+            android:id="@+id/fave_events_exlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indicatorLeft="250dp"
+            android:indicatorRight="300dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/no_data_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/no_data_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"/>
+
+    </RelativeLayout>
 </RelativeLayout>
