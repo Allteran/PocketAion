@@ -6,6 +6,7 @@ package ua.ck.allteran.pocketaion.entites;
 public class NavigationDrawerSubcategory {
     private String subcategoryName;
     private String subcategoryCode;
+    private int subcategoryIcon;
 
     public String getSubcategoryName() {
         return subcategoryName;
@@ -21,5 +22,13 @@ public class NavigationDrawerSubcategory {
 
     public void setSubcategoryCode(String subcategoryCode) {
         this.subcategoryCode = subcategoryCode;
+    }
+
+    public int getSubcategoryIcon() {
+        return subcategoryIcon;
+    }
+
+    public void setSubcategoryIcon(int subcategoryIcon) {
+        this.subcategoryIcon = subcategoryIcon;
     }
 }

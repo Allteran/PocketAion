@@ -1,22 +1,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="ua.ck.allteran.pocketaion.fragments.times.EventTimeFragment">
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="ua.ck.allteran.pocketaion.fragments.PvPEventsFragment">
     <item
         android:id="@+id/action_show_whole_schedule"
-        android:icon="@mipmap/ic_action_view_as_list"
+        android:icon="@mipmap/ic_action_whole_list"
         android:orderInCategory="1"
         android:title="@string/action_show_whole_schedule"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_show_favorites"
-        android:icon="@mipmap/ic_action_important"
+        android:icon="@mipmap/ic_action_favorite"
         android:orderInCategory="2"
-        android:title="@string/action_add_to_favorites"
-        app:showAsAction="ifRoom" />
+        android:title="@string/action_show_favorite_events"
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never"/>
 </menu>

@@ -24,5 +24,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'io.realm:realm-android:0.80.3'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.github.castorflex.smoothprogressbar:library-circular:1.0.1'
+    compile('com.mikepenz:materialdrawer:3.1.2@aar') {
+        transitive = true
+    }
 }

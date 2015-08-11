@@ -1,21 +1,23 @@
 package ua.ck.allteran.pocketaion.fragments;
 
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import ua.ck.allteran.pocketaion.R;
 
 /**
- * Created by Dante on 5/22/2015.
+ * Created by Allteran on 5/22/2015.
  */
 public abstract class BasicFragment extends Fragment {
+    public static final String TAG = BasicFragment.class.getSimpleName();
 
     public void showLoadingBar(final View view) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View progressBar = view.findViewById(R.id.loading_bar_container);
+                View progressBar = view.findViewById(R.id.loading_bar);
                 if (progressBar != null) {
                     progressBar.setVisibility(View.VISIBLE);
                 }
@@ -35,7 +37,7 @@ public abstract class BasicFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View progressBar = view.findViewById(R.id.loading_bar_container);
+                View progressBar = view.findViewById(R.id.loading_bar);
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
@@ -55,7 +57,7 @@ public abstract class BasicFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                View progressBar = view.findViewById(R.id.loading_bar_container);
+                View progressBar = view.findViewById(R.id.loading_bar);
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }

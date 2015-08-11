@@ -1,10 +1,12 @@
 package ua.ck.allteran.pocketaion.entites;
 
 import io.realm.RealmObject;
+import io.realm.annotations.RealmClass;
 
 /**
  * Created by Allteran on 6/6/2015.
  */
+@RealmClass
 public class EventsTime extends RealmObject {
     private int beginTime, endTime;
     private String day;

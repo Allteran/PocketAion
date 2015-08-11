@@ -1,6 +1,7 @@
 package ua.ck.allteran.pocketaion.tasks;
 
 import android.content.Context;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,13 +13,13 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.databases.CreateDatabaseHelper;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 import ua.ck.allteran.pocketaion.utilities.Const;
+import ua.ck.allteran.pocketaion.utilities.Utils;
 
 /**
  * Created by Allteran on 7/7/2015.
@@ -28,7 +29,7 @@ import ua.ck.allteran.pocketaion.utilities.Const;
 public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<PvPEventsLoaderResult> {
 
     public static final String URL_EXTRA = "link_for_time";
-    private static final String TAG = "TimeZone_TAG: ";
+    private static final String TAG = "PvPEventLoaderTag ";
     private Context mContext;
     private String mUrl;
 
@@ -56,28 +57,42 @@ public class PvPEventsLoader extends android.support.v4.content.AsyncTaskLoader<
         loaderResult.setAllEvents(new RealmHelper().getAllEvents(mContext, mContext.getString(R.string.default_database_name)));
 
         OkHttpClient client = new OkHttpClient();
-        String timeFromNetwork = "";
-        try {
-            Request request = new Request.Builder()
-                    .url(mUrl)
-                    .build();
-            Response response = client.newCall(request).execute();
-            timeFromNetwork = response.body().string();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            Calendar calendar = Calendar.getInstance();
-            String nativeTimeZone = calendar.getTimeZone().getID();
-
-            calendar.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
-
-            timeFromNetwork = "{\"fulldate\":\"" + getDayInString(calendar.get(Calendar.DAY_OF_WEEK)) + "\",\"hours\":" +
-                    calendar.get(Calendar.HOUR_OF_DAY) + ",\"minutes\":" + calendar.get(Calendar.MINUTE) + ",\"seconds\":" + calendar.get(Calendar.SECOND) + "}";
-            Log.i(TAG, timeFromNetwork);
-            calendar.setTimeZone(TimeZone.getTimeZone(nativeTimeZone));
+        String time = "";
+        Log.i(TAG, "loader started");
+        if (Utils.isNetworkAvailable(mContext)) {
+            Log.i(TAG, "network is available");
+            try {
+                Log.i(TAG, "trying to get time from network");
+                Request request = new Request.Builder()
+                        .url(mUrl)
+                        .build();
+                Response response = client.newCall(request).execute();
+                time = response.body().string();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                Log.i(TAG, "failure, catching exception");
+                time = getTimeFromDevice(time);
+            }
+        } else {
+            Log.i(TAG, "network isn't available");
+            time = getTimeFromDevice(time);
         }
 
-        loaderResult.setTimeFromNetwork(timeFromNetwork);
+        loaderResult.setTimeFromNetwork(time);
         return loaderResult;
+    }
+
+    private String getTimeFromDevice(String timeFromNetwork) {
+        Calendar calendar = Calendar.getInstance();
+        String nativeTimeZone = calendar.getTimeZone().getID();
+
+        calendar.setTimeZone(TimeZone.getTimeZone("America/Chicago"));
+
+        timeFromNetwork = "{\"fulldate\":\"" + getDayInString(calendar.get(Calendar.DAY_OF_WEEK)) + "\",\"hours\":" +
+                calendar.get(Calendar.HOUR_OF_DAY) + ",\"minutes\":" + calendar.get(Calendar.MINUTE) + ",\"seconds\":" + calendar.get(Calendar.SECOND) + "}";
+        Log.i(TAG, timeFromNetwork);
+        calendar.setTimeZone(TimeZone.getTimeZone(nativeTimeZone));
+        return timeFromNetwork;
     }
 
     private String getDayInString(int dayOfWeek) {

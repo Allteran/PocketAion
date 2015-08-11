@@ -1,4 +1,4 @@
-package ua.ck.allteran.pocketaion.fragments.times;
+package ua.ck.allteran.pocketaion.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +24,6 @@ import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.AlertDialogFaveAdapter;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
 import ua.ck.allteran.pocketaion.entites.PvPEventsLoaderResult;
-import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.helpers.PreferenceHelper;
 import ua.ck.allteran.pocketaion.helpers.StopwatchHelper;
 import ua.ck.allteran.pocketaion.tasks.ParseTimeFromJSON;
@@ -34,9 +34,10 @@ import ua.ck.allteran.pocketaion.utilities.Utils;
 /**
  * Created by Alteran on 5/22/2015.
  */
-public class EventTimeFragment extends BasicFragment implements
+public class PvPEventsFragment extends BasicFragment implements
         LoaderManager.LoaderCallbacks<PvPEventsLoaderResult>, View.OnLongClickListener {
 
+    private static final String TAG = PvPEventsFragment.class.getSimpleName();
     private TextView mTime0hTextView, mTime1hTextView, mTime2hTextView,
             mEventCurrent, mEvent0h, mEvent1h, mEvent2h;
 
@@ -65,18 +66,14 @@ public class EventTimeFragment extends BasicFragment implements
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_siege_and_event_time, container, false);
+        return inflater.inflate(R.layout.fragment_pvp_events, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
-        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mActivity.getSupportActionBar().setTitle(R.string.subcategory_time_siege);
+        mActivity.getSupportActionBar().setTitle(R.string.pvp_events_title);
 
         showLoadingBar(getView());
         mAllEvents = null;
@@ -106,7 +103,7 @@ public class EventTimeFragment extends BasicFragment implements
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.siege_and_event, menu);
+        inflater.inflate(R.menu.pvp_event, menu);
     }
 
     @Override
@@ -141,6 +138,9 @@ public class EventTimeFragment extends BasicFragment implements
         }
     }
 
+    /**
+     * Transforming text from List into strings to display it on screen
+     */
     public void showNextEvents() {
         String textToShowCurrent = "";
         String textToShow0h = "";
@@ -324,7 +324,7 @@ public class EventTimeFragment extends BasicFragment implements
     }
 
     public void startPvPLoader() {
-        if (!Utils.isOnline(mActivity) && !mPreferenceHelper.isWarningShowed()) {
+        if (!Utils.isNetworkAvailable(mActivity) && !mPreferenceHelper.isWarningShowed()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.some_problems_title)
                     .setMessage(R.string.no_network_message)

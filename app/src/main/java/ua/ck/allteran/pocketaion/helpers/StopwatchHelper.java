@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class StopwatchHelper {
     /**
-     * This method will be update time in all TextViews into EventTimeFragment
+     * This method will be update time in all TextViews into PvPEventsFragment
      */
     public void updateTime(final Activity activity, final TextView... time) {
         new Thread(new Runnable() {

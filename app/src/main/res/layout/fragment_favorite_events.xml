@@ -12,8 +12,7 @@
             android:id="@+id/fave_events_exlist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:indicatorLeft="250dp"
-            android:indicatorRight="300dp"/>
+            android:indicatorEnd="200dp"/>
     </RelativeLayout>
 
     <RelativeLayout

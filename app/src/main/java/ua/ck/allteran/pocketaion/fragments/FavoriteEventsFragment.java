@@ -1,11 +1,10 @@
-package ua.ck.allteran.pocketaion.fragments.times;
+package ua.ck.allteran.pocketaion.fragments;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +18,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import io.realm.Realm;
 import ua.ck.allteran.pocketaion.R;
 import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.DatabaseEventsExpAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
-import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.utilities.Const;
 
 /**
@@ -69,8 +66,8 @@ public class FavoriteEventsFragment extends BasicFragment {
 
         assert mActivity.getSupportActionBar() != null;
 
-        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+//        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mActivity.getSupportActionBar().setTitle(R.string.fave_events_title);
         mDatabaseHelper = new RealmHelper();

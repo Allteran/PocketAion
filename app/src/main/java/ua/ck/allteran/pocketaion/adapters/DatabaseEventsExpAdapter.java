@@ -87,25 +87,25 @@ public class DatabaseEventsExpAdapter extends BaseExpandableListAdapter {
         String day;
         switch (groupPosition) {
             case 0:
-                day = Const.DAY_SUNDAY;
+                day = mContext.getString(R.string.day_sun);
                 break;
             case 1:
-                day = Const.DAY_MONDAY;
+                day = mContext.getString(R.string.day_mon);
                 break;
             case 2:
-                day = Const.DAY_TUESDAY;
+                day = mContext.getString(R.string.day_tue);
                 break;
             case 3:
-                day = Const.DAY_WEDNESDAY;
+                day = mContext.getString(R.string.day_wed);
                 break;
             case 4:
-                day = Const.DAY_THURSDAY;
+                day = mContext.getString(R.string.day_thu);
                 break;
             case 5:
-                day = Const.DAY_FRIDAY;
+                day = mContext.getString(R.string.day_fri);
                 break;
             case 6:
-                day = Const.DAY_SATURDAY;
+                day = mContext.getString(R.string.day_sat);
                 break;
             default:
                 day = Const.DAY_ERROR;
@@ -167,7 +167,6 @@ public class DatabaseEventsExpAdapter extends BaseExpandableListAdapter {
         mSubcategoryViewHolder.deleteFromFaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: ...
                 databaseHelper.deleteEvent(mContext, mContext.getString(R.string.fave_events_database_name),
                         mEvents.get(groupPosition).get(childPosition));
                 updateList();

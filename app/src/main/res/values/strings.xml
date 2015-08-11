@@ -1,18 +1,14 @@
 <resources>
     <!--Headers and titles-->
     <string name="app_name">Pocket Aion</string>
-    <string name="category_times">Times</string>
-    <string name="category_maps">Maps</string>
-    <string name="category_stigmas">Stigmas</string>
-    <string name="subcategory_time_siege">Siege Schedule</string>
-    <string name="subcategory_time_rifts">Rift\'s Time</string>
-    <string name="subcategory_time_trees">Tree\'s Time</string>
-    <string name="subcategory_time_sn">Shugo Nomand\'s Time</string>
-    <string name="subcategory_map_rifts">Rift\'s Map</string>
-    <string name="subcategory_map_trees">Tree\'s Map</string>
-    <string name="subcategory_map_sn">Shugo Nomand\'s Map</string>
-    <string name="subcategory_map_bmshugo">Blood Marks Shugo\'s Map</string>
-    <string name="subcategory_stigmas_calculate">Calculate</string>
+    <string name="nd_title_pvp_events">PvP Event\'s Schedule</string>
+    <string name="nd_title_rifts">Rifts</string>
+    <string name="nd_title_trees">Season Trees</string>
+    <string name="nd_title_sn">Shugo Nomand\'s Time</string>
+    <string name="nd_title_bmshugo">Blood Marks Shugo\'s Map</string>
+    <string name="nd_title_stigmas">Stigmas</string>
+
+    <string name="pvp_events_title">PvP Events</string>
 
     <string name="delete_all_fave_events_title">Delete All Favorite Events</string>
     <string name="add_event_to_fav_title">Add Event To Favorites</string>
@@ -21,7 +17,7 @@
     <!--Button's name and labels-->
     <string name="action_settings">Settings</string>
     <string name="action_show_whole_schedule">Show Whole Schedule</string>
-    <string name="action_add_to_favorites">Add Event To Favorites</string>
+    <string name="action_show_favorite_events">Show Favorite Events</string>
     <string name="action_delete_all_fave_events">Delete All Favortie Events</string>
 
     <string name="times_button">Times</string>
@@ -36,8 +32,9 @@
     <string name="delete_all_fave_events_message">Are you sure you want to delete all favorite events?</string>
     <string name="all_events_deleted_message">All favorite events were deleted</string>
     <string name="event_added_to_db_message">were marked as Favorite.</string>
-    <string name="server_error_message">Ooops, we have some issue with app engine. To remove this issue try to restart app.</string>
+    <string name="server_error_message">Oops, we have some issue with app engine. To remove this issue try to restart app.</string>
     <string name="no_network_message">Seems, you have no Internet access :(. Warning! Without access to Internet we don\'t guarantee right app\'s work</string>
+    <string name="no_fave_events_message">Seems, you have no any favorite event.</string>
     <string name="drawer_open">Opened drawer</string>
     <string name="drawer_close">drawer closed</string>
 
@@ -50,6 +47,14 @@
     <string name="no_event_name">No event</string>
     <string name="fave_events_title">Favorite Events</string>
     <string name="whole_schedule_title">Whole Schedule</string>
-    <string name="no_fave_events_message">Seems, you have no any favorite event.</string>
+
+    <!--Days-->
+    <string name="day_sun">Sunday</string>
+    <string name="day_mon">Monday</string>
+    <string name="day_tue">Tuesday</string>
+    <string name="day_wed">Wednesday</string>
+    <string name="day_thu">Thursday</string>
+    <string name="day_fri">Friday</string>
+    <string name="day_sat">Saturday</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package ua.ck.allteran.pocketaion.fragments.times;
+package ua.ck.allteran.pocketaion.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +17,6 @@ import ua.ck.allteran.pocketaion.activities.MainActivity;
 import ua.ck.allteran.pocketaion.adapters.DatabaseEventsExpAdapter;
 import ua.ck.allteran.pocketaion.databases.RealmHelper;
 import ua.ck.allteran.pocketaion.entites.PvPEvent;
-import ua.ck.allteran.pocketaion.fragments.BasicFragment;
 import ua.ck.allteran.pocketaion.utilities.Const;
 
 /**
@@ -53,8 +52,8 @@ public class WholeScheduleFragment extends BasicFragment {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
 
-        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mActivity.getSupportActionBar().setHomeButtonEnabled(true);
+//        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mActivity.getSupportActionBar().setTitle(R.string.whole_schedule_title);
         RealmHelper databaseHelper = new RealmHelper();
